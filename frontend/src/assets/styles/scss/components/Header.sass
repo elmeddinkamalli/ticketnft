@@ -6,6 +6,10 @@
     right: 0
     left: 0
     z-index: 5
+    transition: background .3s
+    &.dark
+        background: #001232
+
     .header-logo
         font-family: 'Anton', sans-serif
         font-size: 22px
@@ -13,3 +17,15 @@
         img
             width: 40px
             height: 40px
+
+    .navbar-nav
+        .nav-link
+            position: relative
+            &.active::after
+                content: ''
+                position: absolute
+                height: 2px
+                width: 100%
+                left: 0
+                bottom: -16px
+                background: #fff

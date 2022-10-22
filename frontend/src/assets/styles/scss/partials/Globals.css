@@ -10,6 +10,27 @@ body {
   box-sizing: border-box;
 }
 
+input[type="text"] {
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px;
+}
+
+input[type="number"] {
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+}
+
 .contents {
   margin-top: 30px;
   margin-bottom: 30px;

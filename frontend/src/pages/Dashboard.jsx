@@ -10,9 +10,13 @@ export default class Dashboard extends Component {
         ></div>
         <div className="dashboard-head">
           <div className="slogan text-center">
-            <h1>
-              BOOK YOUR TICKETS FROM BLOKCHAIN
-            </h1>
+            <h1>BOOK YOUR TICKETS FROM BLOKCHAIN</h1>
+            <h5>Create events, buy and sell tickets as NFT</h5>
+          </div>
+        </div>
+        <div className="dashboard-head">
+          <div className="slogan text-center">
+            <h1>BOOK YOUR TICKETS FROM BLOKCHAIN</h1>
             <h5>Create events, buy and sell tickets as NFT</h5>
           </div>
         </div>

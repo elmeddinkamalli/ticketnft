@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
 import { connectToWallet, logout } from "../../redux/features/userSlice";
 import LoginModal from "../page-contents/LoginModal";
 
@@ -9,12 +10,26 @@ class Header extends Component {
     super(props);
     this.state = {
       isLoginModalActive: false,
+      bg: "transparent",
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps, prevState, this.props, this.state);
+  componentDidMount() {
+    const _this = this;
+    document.addEventListener("scroll", function () {
+      let scrollPos = window.pageYOffset;
+      if (scrollPos > 100) {
+        _this.setState({
+          bg: "dark",
+        });
+      } else {
+        _this.setState({
+          bg: "transparent",
+        });
+      }
+    });
   }
 
   toggleLoginModal() {
@@ -27,13 +42,24 @@ class Header extends Component {
     if (this.props.connectedAddress && this.props.user) {
       return (
         <>
-          <span>{this.props.connectedAddress.substring(0, 5) + "..."}</span>
-          <Button
-            variant="outline-info nowrap ml-3"
-            onClick={() => this.props.logout()}
+          <NavDropdown
+            title={this.props.connectedAddress.substring(0, 5) + "..."}
+            id="basic-nav-dropdown"
           >
-            Log out
-          </Button>
+            <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+            <NavDropdown.Item href="/events/create">
+              Create event
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item>
+              <button
+                className="btn text-danger nowrap p-0 m-0"
+                onClick={() => this.props.logout()}
+              >
+                Log out
+              </button>
+            </NavDropdown.Item>
+          </NavDropdown>
         </>
       );
     } else if (this.props.connectedAddress == null && this.props.user) {
@@ -65,15 +91,52 @@ class Header extends Component {
     }
   }
 
+  headerLinks() {
+    if (this.props.user) {
+      return (
+        <>
+          <NavLink
+            className="px-3 text-white text-decoration-none nav-link"
+            to={"/"}
+            end
+          >
+            Home
+          </NavLink>
+          <NavLink
+            className="px-3 text-white nowrap text-decoration-none nav-link"
+            to={"/events"}
+            end
+          >
+            Events
+          </NavLink>
+          <NavLink
+            className="px-3 text-white nowrap text-decoration-none nav-link"
+            to={"/about"}
+          >
+            About
+          </NavLink>
+        </>
+      );
+    }
+  }
+
   render() {
     return (
       <>
-        <header className="header d-flex justify-content-between align-items-center p-3 border-bottom text-white px-5">
-          <div className="header-logo d-flex align-items-center container p-0 m-0">
+        <header
+          className={`header d-flex justify-content-between align-items-center p-3 border-bottom text-white px-5 ${this.state.bg}`}
+        >
+          <Link
+            to={"/"}
+            className="header-logo d-flex align-items-center container p-0 m-0 text-decoration-none text-white"
+          >
             <img src="static/logo-header-2.png" alt="logo" />
             <span>TicketNFT</span>
-          </div>
+          </Link>
           <div className="align-items-center d-flex">
+            <ul className="d-flex flex-row navbar-nav mr-5">
+              {this.headerLinks()}
+            </ul>
             {this.connectButtons()}
           </div>
         </header>
