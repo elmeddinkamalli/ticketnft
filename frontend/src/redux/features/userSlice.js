@@ -81,7 +81,12 @@ export const userSlice = createSlice({
     provider: null,
     connectedAddress: null,
   },
-  reducers: {},
+  reducers: {
+    logout: () => {
+      localStorage.clear();
+      window.location.reload();
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(connectToWallet.fulfilled, (state, action) => {
       if (action.payload) {
@@ -112,6 +117,7 @@ export const userSlice = createSlice({
   },
 });
 
+export const { logout } = userSlice.actions;
 export const connectedAddress = (state) => state.user.connectedAddress;
 export const loggedUser = (state) => state.user.user;
 
