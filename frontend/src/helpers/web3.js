@@ -1,5 +1,7 @@
-const enableMetamask = async () => {
-  await window.ethereum.request({ method: "eth_requestAccounts" });
+const enableMetamask = async (requestToGetAccounts = true) => {
+  if (requestToGetAccounts) {
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+  }
   const resp = await getAddresses();
   return resp;
 };

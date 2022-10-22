@@ -11,7 +11,7 @@ export const connectToWallet = createAsyncThunk(
     if (payload.isWalletConnect) {
       enabledWalletConnect();
     } else {
-      const res = await enableMetamask();
+      const res = await enableMetamask(payload.requestToGetAccounts);
       if (payload.needNonce) {
         dispatch(generateNonce({ walletAddresses: res }));
       }
@@ -66,6 +66,7 @@ export const getUserDetails = createAsyncThunk(
       connectToWallet({
         isWalletConnect: false,
         needNonce: false,
+        requestToGetAccounts: payload.requestToGetAccounts,
       })
     );
     return await $axios.get("user/userDetails");

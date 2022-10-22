@@ -42,7 +42,11 @@ function App() {
   let user = selector(loggedUser);
   selector(connectedAddress);
   const fetchUserData = async (dispatch, getState) => {
-    await dispatch(getUserDetails());
+    await dispatch(
+      getUserDetails({
+        requestToGetAccounts: false,
+      })
+    );
   };
 
   useEffect(() => {
