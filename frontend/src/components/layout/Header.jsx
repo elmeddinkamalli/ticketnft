@@ -10,7 +10,6 @@ class Header extends Component {
     this.state = {
       isLoginModalActive: false,
     };
-
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
 
@@ -23,18 +22,43 @@ class Header extends Component {
       isLoginModalActive: !this.state.isLoginModalActive,
     });
   }
+
+  connectButtons() {
+    if (this.props.connectedAddress && this.props.user) {
+      return this.props.connectedAddress;
+    } else if (this.props.connectedAddress == null && this.props.user) {
+      return (
+        <Button
+          variant="outline-info"
+          onClick={() => this.props.connectToWallet(false)}
+        >
+          Connect wallet
+        </Button>
+      );
+    } else if (this.props.user == null && this.props.connectedAddress) {
+      return (
+        <Button
+          variant="outline-info"
+          onClick={() => this.props.connectToWallet(true)}
+        >
+          Login
+        </Button>
+      );
+    } else {
+      return (
+        <Button variant="outline-info" onClick={this.toggleLoginModal}>
+          Connect and login
+        </Button>
+      );
+    }
+  }
+
   render() {
     return (
       <>
         <header className="bg-dark d-flex justify-content-between text-white align-items-center p-3">
           <h5>TicketNFT</h5>
-          {this.state.connectedAddress ? (
-            this.state.connectedAddress
-          ) : (
-            <Button variant="outline-info" onClick={this.toggleLoginModal}>
-              Connect wallet
-            </Button>
-          )}
+          {this.connectButtons()}
         </header>
         <LoginModal
           isLoginModalActive={this.state.isLoginModalActive}
@@ -47,8 +71,21 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    connectedAddress: state.connectedAddress,
+    connectedAddress: state.user.connectedAddress,
+    user: state.user.user,
   };
 };
 
-export default connect(mapStateToProps, null)(Header);
+const mapDipatchToProps = (dispatch) => {
+  return {
+    connectToWallet: (login) =>
+      dispatch(
+        connectToWallet({
+          isWalletConnect: false,
+          needNonce: login,
+        })
+      ),
+  };
+};
+
+export default connect(mapStateToProps, mapDipatchToProps)(Header);

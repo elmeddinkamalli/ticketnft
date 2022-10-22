@@ -23,6 +23,7 @@ class LoginModal extends Component {
             onClick={() =>
               this.props.connectToWallet({
                 isWalletConnect: false,
+                needNonce: true,
               })
             }
           >

@@ -1,31 +1,61 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { select } from "underscore";
 import Main from "./pages/Main";
-import { fetchUser, selectUser } from "./redux/features/userSlice";
+import {
+  connectedAddress,
+  connectToWallet,
+  getUserDetails,
+  loggedUser,
+  user,
+} from "./redux/features/userSlice";
+let loginRequest = 0;
 
 function App() {
   const selector = useSelector;
   const dispatch = useDispatch();
-  let user = true;
-  // const fetchUserData = async (dispatch, getState) => {
-  //   await dispatch(fetchUser());
-  // };
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     dispatch(fetchUserData);
-  //   }
-  // }, [user]);
+  // (() => {
+  //   console.log(user);
+  //   new Promise(function (resolve, reject) {
+  //     if(loginRequest == 0){
+  //       loginRequest++;
+  //       resolve(fetchUser());
+  //     }
+  //     // resolve(getAccount());
+  //   }).then((res) => {
+  //     console.log(res);
+  //     // if(!res.error){
+  //     //   setUser(selector(loggedUser))
+  //     // }
+  //     // if(!res){
+  //     //   dispatch(connectToWallet({
+  //     //     isWalletConnect: false,
+  //     //     needNonce: false
+  //     //   }))
+  //     // }else{
+  //     //   setConnectedAccount(res)
+  //     // }
+  //   });
+  // })();
 
-  if (user) {
-    return (
-      <div className="App">
-        <Main />
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
+  let user = selector(loggedUser);
+  selector(connectedAddress);
+  const fetchUserData = async (dispatch, getState) => {
+    await dispatch(getUserDetails());
+  };
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchUserData);
+    }
+  }, [user]);
+
+  return (
+    <div className="App">
+      <Main />
+    </div>
+  );
 }
 
 export default App;

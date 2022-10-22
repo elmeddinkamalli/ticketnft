@@ -2,8 +2,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const $axios = axios.create({
-  withCredentials: true,
-  baseURL: "localhost:8000",
+  headers: {
+    "x-auth-token": localStorage.getItem("authToken"),
+  },
+  "content-type": "application/json",
+  baseURL: process.env.REACT_APP_BASE_API_URL,
 });
 
 $axios.interceptors.response.use(
