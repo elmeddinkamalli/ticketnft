@@ -91,7 +91,10 @@ class Event extends Component {
                     <div className="grid-container">
                       {this.state.event.ticketDesigns.map((design) => {
                         return (
-                          <Link to={`/tickets/${design._id}`} className="ticket">
+                          <Link
+                            to={`/tickets/${design._id}`}
+                            className="ticket"
+                          >
                             <img
                               className="w-100 event-image"
                               src={design.image}

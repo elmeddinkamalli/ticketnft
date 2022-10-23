@@ -10,15 +10,9 @@ body {
   box-sizing: border-box;
 }
 
-input[type="text"] {
-  background: transparent;
-  border: 2px solid #fff;
-  border-radius: 5px;
-  color: #fff;
-  padding: 8px;
-}
-
-input[type="number"] {
+input[type="text"],
+input[type="number"],
+textarea {
   background: transparent;
   border: 2px solid #fff;
   border-radius: 5px;
@@ -27,7 +21,8 @@ input[type="number"] {
 }
 
 input[type="text"]:focus,
-input[type="number"]:focus {
+input[type="number"]:focus,
+textarea {
   outline: none;
 }
 

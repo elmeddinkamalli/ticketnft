@@ -30,3 +30,30 @@
 
                 span
                     color: red
+
+    .dashboard-slider
+        .slider-item
+            cursor: pointer
+            position: relative
+            overflow: hidden
+
+            img
+                transition: all .3s
+
+            &:hover
+                img
+                    transform: scale(1.5) rotate(20deg)
+                .slider-item-info-section
+                    bottom: 0
+                    width: 100%
+                    left: 0
+
+            .slider-item-info-section
+                position: absolute
+                transition: all .3s
+                bottom: -100%
+                background: rgb(0 0 0 / 43%)
+                left: 16px
+                right: 0
+                width: calc(100% - 32px)
+                padding: 20px

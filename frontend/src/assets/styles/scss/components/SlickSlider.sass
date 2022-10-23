@@ -1,0 +1,55 @@
+.slider
+    .slick-arrow
+        display: none !important
+    .slick-track
+        display: flex !important
+
+    .slick-slide
+        height: inherit !important
+
+        & > div
+            height: 100%
+
+    .slider-headline
+        border: none
+        &:hover
+            border: none
+        @media screen and (max-width: $small)
+            font-size: 20px
+        @media screen and (max-width: 400px)
+            font-size: 18px
+
+    .slider-content-navigator
+        button
+            &.active
+                h3
+                    color: #000
+            h3
+                color: red
+        @media screen and (max-width: $small)
+            border-bottom: 1px solid #e6e8ec
+            button
+                &.active
+                    border-bottom: 1px solid #000
+                h3
+                    white-space: nowrap
+        @media screen and (max-width: 400px)
+            button
+                h3
+                    font-size: 17px
+
+
+    .controls
+        width: 125px
+
+        span
+            cursor: pointer
+            width: 46px
+            height: 46px
+
+            &:hover
+                border: 1px solid #fff
+                border-radius: 50%
+
+            .arrow-left
+                transform: rotate(180deg)

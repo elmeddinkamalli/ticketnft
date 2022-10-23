@@ -15,6 +15,10 @@ const create = [
 ];
 eventRoute.post("/create", create);
 
+// Get events
+const getEvents = [EventCtr.getEvents];
+eventRoute.get("/list", getEvents);
+
 // Get single event
 const getEvent = [EventCtr.getEvent];
 eventRoute.get("/:id", getEvent);

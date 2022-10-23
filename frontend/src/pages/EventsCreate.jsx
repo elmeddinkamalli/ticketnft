@@ -17,6 +17,7 @@ class EventsCreate extends Component {
       uploadedPhoto: null,
       preview: null,
       eventName: null,
+      eventDescription: null,
       maxTicketSupply: null,
       pricePerTicket: null,
       uploadedTicket: null,
@@ -103,6 +104,7 @@ class EventsCreate extends Component {
     $axios
       .post("/events/create", {
         eventName: this.state.eventName,
+        eventDescription: this.state.eventDescription,
         maxTicketSupply: this.state.maxTicketSupply,
         pricePerTicket: this.state.pricePerTicket,
         image: ipfsHashEventImage.path,
@@ -156,6 +158,24 @@ class EventsCreate extends Component {
                     });
                   }}
                 />
+              </div>
+              <div className="my-3">
+                <label className="d-block" htmlFor="event-description">
+                  Event description:
+                </label>
+                <textarea
+                  className={`w-100`}
+                  name="event-description"
+                  id="event-description"
+                  placeholder="Enter event description"
+                  cols="30"
+                  rows="4"
+                  onChange={(e) => {
+                    this.setState({
+                      eventDescription: e.target.value,
+                    });
+                  }}
+                ></textarea>
               </div>
               <div className="my-3">
                 <label className="d-block" htmlFor="ticket-count">
