@@ -4,6 +4,9 @@ import { Navigate } from "react-router-dom";
 import LoginAlert from "./LoginAlert";
 import { FileUploader } from "react-drag-drop-files";
 import { ReactComponent as UploadIcon } from "../assets/static/upload.svg";
+import $axios from "../helpers/axios";
+import { compressImage } from "../helpers/functions";
+import ipfs from "../helpers/ipfs";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -15,34 +18,64 @@ class EventsCreate extends Component {
       eventName: null,
       maxTicketSupply: null,
       pricePerTicket: null,
+      uploadedTicket: null,
+      ticketPreview: null,
+      ticketDesignIsDefault: true,
     };
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  uploadPhoto(file) {
-    console.log("test");
+  async uploadPhoto(file) {
     this.setState({
-      uploadedPhoto: file[0],
+      uploadedPhoto: await compressImage(file),
       preview: URL.createObjectURL(new Blob([file], { type: "image/png" })),
     });
   }
 
-  handleSubmit() {
-    const parameters = [
-      this.state.eventName,
-      this.state.maxTicketSupply,
-      this.state.pricePerTicket,
-      {
-        value: 1000000000000000,
+  async uploadTicket(file) {
+    this.setState({
+      uploadedTicket: await compressImage(file),
+      ticketPreview: URL.createObjectURL(
+        new Blob([file], { type: "image/png" })
+      ),
+    });
+  }
+
+  async handleSubmit() {
+    let ipfsHash = await ipfs.add(this.state.uploadedPhoto, {
+      pin: true,
+      progress: (bytes) => {
+        // console.log("File upload progress ", Math.floor(bytes * 100 / (params.logo.size)))
       },
-    ];
-    this.props.contract
-      .createEvent(...parameters)
-      .then((res) => {
-        console.log(res);
+    });
+    console.log(ipfsHash);
+
+    $axios
+      .post("/events/create", {
+        eventName: this.state.eventName,
+        maxTicketSupply: this.state.maxTicketSupply,
+        pricePerTicket: this.state.pricePerTicket,
+        image: ipfsHash.path,
       })
-      .catch(console.log);
+      .then((res) => {
+        const draftEventId = res.data.data._id;
+        const parameters = [
+          this.state.eventName,
+          this.state.maxTicketSupply,
+          this.state.pricePerTicket,
+          {
+            value: 1000000000000000,
+          },
+        ];
+        this.props.contract
+          .createEvent(...parameters)
+          .then((res2) => {
+            console.log(res2);
+            return (window.location.href = `/events/${draftEventId}`);
+          })
+          .catch(console.log);
+      });
   }
 
   render() {
@@ -145,6 +178,80 @@ class EventsCreate extends Component {
                     <p className="m-0">or click to browse</p>
                   </div>
                 </FileUploader>
+              )}
+            </div>
+
+            <div className="ticket-upload-preview w-100 my-3">
+              <label className="d-block" htmlFor="image">
+                Ticket design:
+              </label>
+              <select
+                className="w-100"
+                name="ticket-design"
+                id="ticket-design"
+                onChange={(e) => {
+                  this.setState({
+                    ticketDesignIsDefault: e.target.value == 1 ? true : false,
+                  });
+                }}
+              >
+                <option value="1" defaultValue>
+                  Default
+                </option>
+                <option value="0">Upload</option>
+              </select>
+              {this.state.ticketDesignIsDefault ? (
+                <div className="my-3">
+                  <label className="d-block" htmlFor="image">
+                    Ticket:
+                  </label>
+                  <img
+                    className="w-50"
+                    src="/static/ticket_design_default.png"
+                    alt="ticket design"
+                  />
+                </div>
+              ) : this.state.ticketPreview ? (
+                <div className="preview-box my-3">
+                  <label className="d-block" htmlFor="image">
+                    Ticket:
+                  </label>
+                  <img
+                    src={this.state.ticketPreview}
+                    className="preview"
+                    alt="uploaded ticket"
+                  />
+                  <button
+                    className="text-white"
+                    onClick={() =>
+                      this.setState({
+                        uploadedTicket: null,
+                        ticketPreview: null,
+                      })
+                    }
+                  >
+                    Change
+                  </button>
+                </div>
+              ) : (
+                <div className="my-3">
+                  <label className="d-block" htmlFor="image">
+                    Upload ticket design:
+                  </label>
+                  <FileUploader
+                    classes="fileuploader w-100"
+                    multiple={false}
+                    handleChange={this.uploadTicket}
+                    name="file"
+                    types={fileTypes}
+                  >
+                    <div className="w-100 d-flex flex-column justify-content-center align-items-center p-4">
+                      <UploadIcon className="mb-4" />
+                      <h5>Drag and drop your files here</h5>
+                      <p className="m-0">or click to browse</p>
+                    </div>
+                  </FileUploader>
+                </div>
               )}
             </div>
             <div className="mt-4 w-100">

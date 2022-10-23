@@ -1,4 +1,5 @@
 {
   "DB_ERROR": "Some error occurred. Please try again.",
-  "SUCCESS": "SUCCESS"
+  "SUCCESS": "SUCCESS",
+  "CANNOT_CREATE_EVENT": "Not authorized to create event"
 }

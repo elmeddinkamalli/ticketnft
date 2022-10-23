@@ -52,6 +52,10 @@ const userSchema = new Schema(
       lowercase: true,
       unique: true,
     },
+    canCreateEvent: {
+      type: Boolean,
+      default: false,
+    },
     isActive: {
       type: Boolean,
       default: true,

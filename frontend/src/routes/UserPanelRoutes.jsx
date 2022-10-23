@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
+import Event from "../pages/Event";
 import EventsCreate from "../pages/EventsCreate";
 
 export default class UserPanelRoutes extends Component {
@@ -11,6 +12,7 @@ export default class UserPanelRoutes extends Component {
         <Routes>
           <Route path={"/"} element={<Dashboard />} />
           <Route path={"/events/create"} element={<EventsCreate />} />
+          <Route path={"/events/:id"} element={<Event />} />
         </Routes>
       </div>
     );
