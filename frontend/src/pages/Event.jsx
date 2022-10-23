@@ -85,39 +85,26 @@ class Event extends Component {
                   <span>Ticket price: {this.state.event.pricePerTicket}</span>
                 </div>
                 <hr />
-                <div className="tickets">
-                  <h5>Mint your own ticket for this event below now</h5>
-                  <div className="grid-container">
-                    <div className="ticket">
-                      <img
-                        className="w-100 event-image"
-                        src={"/static/default_poster.png"}
-                        alt="event image"
-                      />
-                    </div>
-                    <div className="ticket">
-                      <img
-                        className="w-100 event-image"
-                        src={"/static/default_poster.png"}
-                        alt="event image"
-                      />
-                    </div>
-                    <div className="ticket">
-                      <img
-                        className="w-100 event-image"
-                        src={"/static/default_poster.png"}
-                        alt="event image"
-                      />
-                    </div>
-                    <div className="ticket">
-                      <img
-                        className="w-100 event-image"
-                        src={"/static/default_poster.png"}
-                        alt="event image"
-                      />
+                {this.state.event.ticketDesigns ? (
+                  <div className="tickets">
+                    <h5>Mint your own ticket for this event below now</h5>
+                    <div className="grid-container">
+                      {this.state.event.ticketDesigns.map((design) => {
+                        return (
+                          <Link to={`/tickets/${design._id}`} className="ticket">
+                            <img
+                              className="w-100 event-image"
+                              src={design.image}
+                              alt="event image"
+                            />
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
-                </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ) : (

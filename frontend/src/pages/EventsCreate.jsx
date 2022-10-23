@@ -7,6 +7,7 @@ import { ReactComponent as UploadIcon } from "../assets/static/upload.svg";
 import $axios from "../helpers/axios";
 import { compressImage } from "../helpers/functions";
 import ipfs from "../helpers/ipfs";
+import DefaultTicketDesign from "../assets/static/ticket_design_to_mint.png";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -21,8 +22,10 @@ class EventsCreate extends Component {
       uploadedTicket: null,
       ticketPreview: null,
       ticketDesignIsDefault: true,
+      errors: [],
     };
     this.uploadPhoto = this.uploadPhoto.bind(this);
+    this.uploadTicket = this.uploadTicket.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -42,21 +45,69 @@ class EventsCreate extends Component {
     });
   }
 
+  validateSubmit() {
+    this.setState({
+      errors: [],
+    });
+
+    let errors = [];
+    if (!this.state.uploadedPhoto) errors.push("eventImage");
+    if (!this.state.ticketDesignIsDefault && !this.state.uploadedTicket)
+      errors.push("ticketDesign");
+    if (!this.state.eventName) errors.push("eventName");
+    if (!this.state.maxTicketSupply) errors.push("maxTicketSupply");
+    if (!this.state.pricePerTicket) errors.push("pricePerTicket");
+
+    this.setState({
+      errors: errors,
+    });
+
+    if (errors.length) return false;
+    return true;
+  }
+
   async handleSubmit() {
-    let ipfsHash = await ipfs.add(this.state.uploadedPhoto, {
+    if (!this.validateSubmit()) return false;
+
+    let ipfsHashTicketDesign;
+    let ipfsHashEventImage = await ipfs.add(this.state.uploadedPhoto, {
       pin: true,
       progress: (bytes) => {
         // console.log("File upload progress ", Math.floor(bytes * 100 / (params.logo.size)))
       },
     });
-    console.log(ipfsHash);
+
+    if (this.state.ticketDesignIsDefault) {
+      await fetch(DefaultTicketDesign)
+        .then((res) => res.blob())
+        .then(async (blob) => {
+          ipfsHashTicketDesign = await ipfs.add(
+            new File([blob], "default-design", { type: "image/png" }),
+            {
+              pin: true,
+              progress: (bytes) => {
+                // console.log("File upload progress ", Math.floor(bytes * 100 / (params.logo.size)))
+              },
+            }
+          );
+        });
+    } else {
+      ipfsHashTicketDesign = await ipfs.add(this.state.uploadedTicket, {
+        pin: true,
+        progress: (bytes) => {
+          // console.log("File upload progress ", Math.floor(bytes * 100 / (params.logo.size)))
+        },
+      });
+    }
 
     $axios
       .post("/events/create", {
         eventName: this.state.eventName,
         maxTicketSupply: this.state.maxTicketSupply,
         pricePerTicket: this.state.pricePerTicket,
-        image: ipfsHash.path,
+        image: ipfsHashEventImage.path,
+        ticketDesignIsDefault: this.state.ticketDesignIsDefault,
+        ticketImage: ipfsHashTicketDesign.path,
       })
       .then((res) => {
         const draftEventId = res.data.data._id;
@@ -92,7 +143,9 @@ class EventsCreate extends Component {
                   Event name:
                 </label>
                 <input
-                  className="w-100"
+                  className={`w-100 ${
+                    this.state.errors.includes("eventName") ? "hasError" : ""
+                  }`}
                   type="text"
                   name="event-name"
                   id="event-name"
@@ -109,7 +162,11 @@ class EventsCreate extends Component {
                   Ticket count for sale:
                 </label>
                 <input
-                  className="w-100"
+                  className={`w-100 ${
+                    this.state.errors.includes("maxTicketSupply")
+                      ? "hasError"
+                      : ""
+                  }`}
                   type="number"
                   min={1}
                   name="ticket-count"
@@ -127,7 +184,11 @@ class EventsCreate extends Component {
                   Ticket price (ETH):
                 </label>
                 <input
-                  className="w-100"
+                  className={`w-100 ${
+                    this.state.errors.includes("pricePerTicket")
+                      ? "hasError"
+                      : ""
+                  }`}
                   type="number"
                   min={1}
                   name="ticket-price"
@@ -166,7 +227,9 @@ class EventsCreate extends Component {
                 </div>
               ) : (
                 <FileUploader
-                  classes="fileuploader w-100"
+                  classes={`fileuploader w-100 ${
+                    this.state.errors.includes("eventImage") ? "hasError" : ""
+                  }`}
                   multiple={false}
                   handleChange={this.uploadPhoto}
                   name="file"
@@ -239,7 +302,11 @@ class EventsCreate extends Component {
                     Upload ticket design:
                   </label>
                   <FileUploader
-                    classes="fileuploader w-100"
+                    classes={`fileuploader w-100 ${
+                      this.state.errors.includes("ticketDesign")
+                        ? "hasError"
+                        : ""
+                    }`}
                     multiple={false}
                     handleChange={this.uploadTicket}
                     name="file"

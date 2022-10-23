@@ -1,4 +1,5 @@
 const Utils = require("../../helper/utils");
+const TicketDesignModel = require("../ticketDesign/ticketDesignModel");
 const EventModel = require("./eventModel");
 
 const EventCtr = {};
@@ -6,7 +7,14 @@ const EventCtr = {};
 // Create Events
 EventCtr.create = async (req, res) => {
   try {
-    const { eventName, maxTicketSupply, pricePerTicket, image } = req.body;
+    const {
+      eventName,
+      maxTicketSupply,
+      pricePerTicket,
+      image,
+      ticketDesignIsDefault,
+      ticketImage,
+    } = req.body;
 
     const createNewEvent = new EventModel({
       ownerId: req.userData._id,
@@ -17,6 +25,12 @@ EventCtr.create = async (req, res) => {
     });
 
     const saveEvent = await createNewEvent.save();
+
+    await new TicketDesignModel({
+      eventId: saveEvent._id,
+      image: ticketImage,
+      isDefault: ticketDesignIsDefault,
+    }).save();
 
     return res.status(200).json({
       message: req.t("ADD_NEW_EVENT"),
@@ -38,7 +52,7 @@ EventCtr.create = async (req, res) => {
 // get single event details
 EventCtr.getEvent = async (req, res) => {
   try {
-    const getEventDetails = JSON.parse(
+    let getEventDetails = JSON.parse(
       JSON.stringify(
         await EventModel.findById(req.params.id).populate({
           path: "ownerId",
@@ -46,6 +60,10 @@ EventCtr.getEvent = async (req, res) => {
         })
       )
     );
+
+    getEventDetails.ticketDesigns = await TicketDesignModel.find({
+      eventId: getEventDetails._id,
+    });
 
     return res.status(200).json({
       message: req.t("SINGLE_EVENT"),

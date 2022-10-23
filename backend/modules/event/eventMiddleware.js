@@ -20,6 +20,7 @@ EventMiddleware.validateAdd = async (req, res, next) => {
     maxTicketSupply: Joi.number().required(),
     pricePerTicket: Joi.number().required(),
     image: Joi.string().required(),
+    ticketImage: Joi.string().required(),
   });
   validate.validateRequest(req, res, next, schema);
 };
