@@ -28,9 +28,9 @@ export default class Events extends Component {
                 <Link
                   to={`/events/${event._id}`}
                   key={i}
-                  className="event-item"
+                  className="event-item h-100"
                 >
-                  <img className="w-100" src={event.image} alt="" />
+                  <img className="w-100 h-100" src={event.image} alt="" />
                   <div className="event-item-info-section">
                     <h5 className="text-white">{event.eventName}</h5>
                     <Link

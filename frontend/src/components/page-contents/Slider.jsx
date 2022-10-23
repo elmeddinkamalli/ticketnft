@@ -65,9 +65,9 @@ export default class MySlider extends Component {
               <Link
                 to={`/events/${event._id}`}
                 key={i}
-                className="slider-item px-3"
+                className="slider-item px-3 h-100"
               >
-                <img className="w-100" src={event.image} alt="" />
+                <img className="w-100 h-100" src={event.image} alt="" />
                 <div className="slider-item-info-section">
                   <h5 className="text-white">{event.eventName}</h5>
                   <Link
