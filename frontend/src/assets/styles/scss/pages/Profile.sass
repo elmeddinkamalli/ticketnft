@@ -1,0 +1,63 @@
+.profile
+    padding-top: 50px
+    .profile-wrapper
+        margin-top: 80px
+        border: 4px solid #0f4070
+        border-radius: 20px
+
+        .avatar
+            width: 150px
+            height: 150px
+            object-fit: cover
+            border-radius: 50%
+
+    .tabs
+        li
+            background: transparent
+            border: 2px solid #0f4070
+            color: #fff
+            cursor: pointer
+
+            &.active
+                background: #0f4070
+
+
+    .grid-container
+        display: grid
+        grid-template-columns: auto
+        gap: 15px
+        row-gap: 20px
+
+        @media screen and (min-width: $small)
+            grid-template-columns: auto
+        @media screen and (min-width: $medium)
+            grid-template-columns: repeat(3, 1fr)
+
+            .event-item
+                cursor: pointer
+                position: relative
+                overflow: hidden
+
+                img
+                    transition: all .3s
+                    object-fit: cover
+
+                &:hover
+                    img
+                        transform: scale(1.5) rotate(20deg)
+                    .event-item-info-section
+                        bottom: 0
+                        width: 100%
+                        left: 0
+
+                .event-item-info-section
+                    position: absolute
+                    transition: all .3s
+                    bottom: -100%
+                    background: rgb(0 0 0 / 43%)
+                    left: 16px
+                    right: 0
+                    width: calc(100% - 32px)
+                    padding: 20px
+
+        

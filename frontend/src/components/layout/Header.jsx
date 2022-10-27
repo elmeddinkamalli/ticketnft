@@ -46,7 +46,9 @@ class Header extends Component {
             title={this.props.connectedAddress.substring(0, 5) + "..."}
             id="basic-nav-dropdown"
           >
-            <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+            <NavDropdown.Item href={`/profile/${this.props.user._id}`}>
+              Profile
+            </NavDropdown.Item>
             <NavDropdown.Item href="/events/create">
               Create event
             </NavDropdown.Item>

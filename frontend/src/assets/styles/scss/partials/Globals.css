@@ -12,6 +12,7 @@ body {
 
 input[type="text"],
 input[type="number"],
+input[type="email"],
 textarea {
   background: transparent;
   border: 2px solid #fff;
@@ -22,11 +23,13 @@ textarea {
 
 input[type="text"]:focus,
 input[type="number"]:focus,
+input[type="email"]:focus,
 textarea {
   outline: none;
 }
 
 input[type="text"].hasError,
+input[type="email"].hasError,
 input[type="number"].hasError {
   border-color: red;
 }

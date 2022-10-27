@@ -75,12 +75,40 @@ class Ticket extends Component {
   }
 
   async mintTicket() {
+    let ipfsHash;
     await fetch(document.getElementById("Canvatext").toDataURL())
       .then((res) => res.blob())
       .then(async (blob) => {
-        await ipfs.add(new File([blob], "ticket", { type: "image/png" }), {
-          pin: true
-        });
+        ipfsHash = await ipfs.add(
+          new File([blob], "ticket", { type: "image/png" }),
+          {
+            pin: true,
+          }
+        );
+      });
+
+    let openseaStandards = {
+      name: this.state.ticket.eventId.eventName + " " + "#1",
+      description: this.state.ticket.eventId.description,
+      external_url: "https://ticketnft.io",
+      image: "https://ipfs.io/ipfs/" + ipfsHash.path,
+      attributes: [],
+    };
+
+    const jsonUrl = await ipfs.pinJson(openseaStandards);
+    $axios
+      .post("/tickets/create", {
+        eventId: this.state.ticket.eventId._id,
+        metadataCID: jsonUrl,
+        image: ipfsHash.path,
+      })
+      .then((res) => {
+        this.props.contract
+          .mintTicket(1)
+          .then((res2) => {
+            console.log(res2);
+          })
+          .catch(console.log);
       });
   }
 
