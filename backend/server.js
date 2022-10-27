@@ -1,4 +1,5 @@
 const http = require("http");
+global.__basedir = __dirname;
 
 require("dotenv").config();
 

@@ -6,6 +6,9 @@ const ticketRoute = require("./modules/ticket/ticketRoute");
 
 const app = express.Router();
 
+app.use(express.static('public')); 
+app.use('/uploads', express.static('uploads'));
+
 // Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/events", eventRoute);

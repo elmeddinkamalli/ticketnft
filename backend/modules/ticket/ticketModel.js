@@ -9,24 +9,6 @@ const decryptProperty = function (value) {
   }
 };
 
-const imageSchmea = new Schema({
-  original: {
-    type: String,
-    default: null,
-    get: decryptProperty,
-  },
-  compressed: {
-    type: String,
-    default: null,
-    get: decryptProperty,
-  },
-  format: {
-    type: String,
-    default: null,
-  },
-  extra: { _id: false },
-});
-
 const ticketSchema = new Schema(
   {
     eventId: {
@@ -39,15 +21,20 @@ const ticketSchema = new Schema(
       ref: "events",
       required: true,
     },
-    image: imageSchmea,
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
+    metadataCID: {
+      type: String,
+      default: null,
+      get: decryptProperty,
+    },
+    image: {
+      type: String,
+      default: null,
+      get: decryptProperty,
     },
     isDraft: {
       type: Boolean,

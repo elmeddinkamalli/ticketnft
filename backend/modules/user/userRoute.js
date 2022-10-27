@@ -18,12 +18,22 @@ userRoute.get("/userDetails", getDetails);
 const genrateNonce = [UserCtr.genrateNonce];
 userRoute.get("/genrateNonce/:address", genrateNonce);
 
+// update single user Details
+const updateUserDetails = [
+  Auth.isAuthenticatedUser,
+  UserMiddleware.signUpValidator,
+  UserMiddleware.checkUsernameAlreadyAdded,
+  UserCtr.updateUserDetails,
+];
+userRoute.post("/edit", updateUserDetails);
+
 // get single user Details
-// const getSingleUserDetails = [
-//   Auth.checkIsAuthenticated,
-//   UserCtr.getSingleUserDetails,
-// ];
-// userRoute.get("/getSingleUser/:userId", getSingleUserDetails);
+const getSingleUserDetails = [UserCtr.getSingleUserDetails];
+userRoute.get("/:userId", getSingleUserDetails);
+
+// get single user events and tickets
+const getSingleUserTickets = [UserCtr.getSingleUserTickets];
+userRoute.get("/tickets/:userId", getSingleUserTickets);
 
 // genrate acces token
 // const genrateAccessToken = [

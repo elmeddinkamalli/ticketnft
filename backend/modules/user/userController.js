@@ -4,6 +4,10 @@ const Utils = require("../../helper/utils");
 const crypto = require("crypto");
 const Web3 = require("web3");
 const jwtUtil = require("../../helper/jwtUtils");
+const TicketModel = require("../ticket/ticketModel");
+const EventModel = require("../event/eventModel");
+let formidable = require("formidable");
+let fs = require("fs");
 
 const UserCtr = {};
 
@@ -164,54 +168,103 @@ UserCtr.genrateNonce = async (req, res) => {
 };
 
 // get user details
-// UserCtr.getSingleUserDetails = async (req, res) => {
-//   try {
-//     const getUserDetails = JSON.parse(
-//       JSON.stringify(
-//         await UserModel.findOne(
-//           { _id: req.params.userId },
-//           { stage: 0, transactionId: 0, status: 0 }
-//         )
-//           .populate({
-//             path: "category",
-//             select: { _id: 1, categoryName: 1, image: 1 },
-//           })
-//           .populate({
-//             path: "role",
-//             select: { _id: 1, roleName: 1 },
-//           })
-//       )
-//     );
+UserCtr.getSingleUserDetails = async (req, res) => {
+  try {
+    const getUserDetails = JSON.parse(
+      JSON.stringify(await UserModel.findOne({ _id: req.params.userId }))
+    );
 
-//     if (req.userData && req.userData._id) {
-//       const checkIsFollowed = await FollowModel.findOne({
-//         userId: req.params.userId,
-//         follow: req.userData._id,
-//       });
+    getUserDetails.events = await EventModel.find({
+      ownerId: req.params.userId,
+    });
 
-//       if (checkIsFollowed) {
-//         getUserDetails.isFollowed = true;
-//       } else {
-//         getUserDetails.isFollowed = false;
-//       }
-//     } else {
-//       getUserDetails.isFollowed = false;
-//     }
+    getUserDetails.tickets = await TicketModel.find({
+      ownerId: req.params.userId,
+    }).populate({
+      path: "eventId",
+    });
 
-//     return res.status(200).json({
-//       message: "SINGLE_USER_DETAILS",
-//       status: true,
-//       data: getUserDetails,
-//     });
-//   } catch (err) {
-//     Utils.echoLog("Erro in getUserDetails creator");
-//     return res.status(500).json({
-//       message: req.t("DB_ERROR"),
-//       status: true,
-//       err: err.message ? err.message : err,
-//     });
-//   }
-// };
+    return res.status(200).json({
+      message: "SINGLE_USER_DETAILS",
+      status: true,
+      data: getUserDetails,
+    });
+  } catch (err) {
+    Utils.echoLog("Erro in getUserDetails creator");
+    return res.status(500).json({
+      message: req.t("DB_ERROR"),
+      status: true,
+      err: err.message ? err.message : err,
+    });
+  }
+};
+
+// get user details
+UserCtr.getSingleUserTickets = async (req, res) => {
+  try {
+    const getUserTickets = await TicketModel.find({
+      ownerId: req.params.userId,
+    }).populate({
+      path: "eventId",
+    });
+
+    return res.status(200).json({
+      message: "SINGLE_USER_TICKETS",
+      status: true,
+      data: getUserTickets,
+    });
+  } catch (err) {
+    Utils.echoLog("Erro in getUserTickets creator");
+    return res.status(500).json({
+      message: req.t("DB_ERROR"),
+      status: true,
+      err: err.message ? err.message : err,
+    });
+  }
+};
+
+UserCtr.updateUserDetails = async (req, res) => {
+  try {
+    let form = new formidable.IncomingForm();
+
+    let avatar;
+
+    form.parse(req, async function (error, fields, file) {
+      if (file.profile) {
+        let filepath = file.profile.filepath;
+        let newpath = __basedir + "/uploads/avatars/";
+        newpath += file.profile.originalFilename;
+
+        //Copy the uploaded file to a custom folder
+        fs.rename(filepath, newpath, function () {
+          avatar = file.profile.originalFilename;
+        });
+
+        let user = await UserModel.findById(req.userData._id);
+        user.name = fields.fullname;
+        user.username = fields.username;
+        user.email = fields.email;
+        user.profile = avatar;
+        await user.save();
+      }
+    });
+
+    // console.log(res);
+
+    return res.status(200).json({
+      message: "SINGLE_USER_TICKETS",
+      status: true,
+      data: "success",
+    });
+  } catch (err) {
+    Utils.echoLog("Erro in getUserTickets creator");
+    return res.status(500).json({
+      message: req.t("DB_ERROR"),
+      status: true,
+      err: err.message ? err.message : err,
+    });
+  }
+};
 
 // genrate access token
 // UserCtr.genrateAccessTokenForTwitter = async (req, res) => {

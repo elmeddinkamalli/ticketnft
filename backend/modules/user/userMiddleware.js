@@ -4,30 +4,17 @@ const UserModel = require("./userModel");
 const UserMiddleware = {};
 
 UserMiddleware.signUpValidator = (req, res, next) => {
-  const socailSchema = Joi.object().keys({
-    username: [Joi.string().optional(), Joi.allow(null)],
-    url: [Joi.string().optional(), Joi.allow(null)],
-    isVerified: Joi.boolean(),
-  });
-
-  const portfolioSchema = Joi.object().keys({
-    instagarm: socailSchema,
-    facebook: socailSchema,
-    github: socailSchema,
-    twitter: socailSchema,
-    website: socailSchema,
-  });
-
   const schema = Joi.object({
-    name: Joi.string(),
-    surname: Joi.string(),
+    name: Joi.string().allow(null),
     isCreator: Joi.boolean(),
-    portfolio: portfolioSchema,
-    email: Joi.string().email(),
-    bio: Joi.string(),
-    username: Joi.string(),
-    cover: Joi.string(),
-    category: Joi.array().items(Joi.string()),
+    email: Joi.string().email().allow(null),
+    profile: Joi.object({
+      type: Joi.string().valid("image/png", "image/jpeg", "image/jpg"),
+      size: 15,
+    }).unknown(true),
+    bio: Joi.string().allow(null),
+    username: Joi.string().allow(null),
+    cover: Joi.string().allow(null),
   });
   validate.validateRequest(req, res, next, schema);
 };

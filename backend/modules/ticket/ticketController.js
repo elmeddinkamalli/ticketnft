@@ -33,4 +33,38 @@ TicketCtr.getTicketDesign = async (req, res) => {
   }
 };
 
+// create ticket
+TicketCtr.createTicket = async (req, res) => {
+  try {
+    const { eventId, metadataCID, image } = req.body;
+
+    const ticketDesignModel = await TicketDesignModel.findOne({
+      eventId: eventId,
+    });
+
+    const createTicket = await new TicketModel({
+      eventId: eventId,
+      designId: ticketDesignModel._id,
+      ownerId: req.userData._id,
+      metadataCID: metadataCID,
+      image: image,
+    }).save();
+
+    return res.status(200).json({
+      message: req.t("ADD_NEW_TICKET"),
+      status: true,
+      data: {
+        _id: createTicket._id,
+      },
+    });
+  } catch (err) {
+    Utils.echoLog("error in nft ticket", err);
+    return res.status(500).json({
+      message: req.t("DB_ERROR"),
+      status: false,
+      err: err.message ? err.message : err,
+    });
+  }
+};
+
 module.exports = TicketCtr;

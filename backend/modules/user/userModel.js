@@ -4,7 +4,7 @@ const { status } = require("../../helper/enum");
 const { Schema } = mongoose;
 const decryptProperty = function (value) {
   if (value) {
-    return `${process.env.IPFSURL}/${value}`;
+    return `${process.env.BASE_URL}/uploads/avatars//${value}`;
   } else {
     return null;
   }
