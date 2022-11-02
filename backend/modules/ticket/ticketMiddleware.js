@@ -22,8 +22,9 @@ TicketMiddleware.checkCanUserBuyTicket = async (req, res, next) => {
 TicketMiddleware.validateAdd = async (req, res, next) => {
   const schema = Joi.object({
     eventId: Joi.string().required(),
-    metadataCID: Joi.string().required(),
+    metadataURI: Joi.string().required(),
     image: Joi.string().required(),
+    uniqueId: Joi.number().required(),
   });
   validate.validateRequest(req, res, next, schema);
 };

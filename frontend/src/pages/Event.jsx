@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import $axios from "../helpers/axios";
+import { setLoading } from "../redux/features/userSlice";
 
 class Event extends Component {
   constructor(props) {
@@ -16,20 +17,22 @@ class Event extends Component {
   }
 
   async componentDidMount() {
+    this.props.setLoading(true);
     await $axios.get(`/events/${this.state.id}`).then((res) => {
       this.setState({
         event: res.data.data,
       });
 
-      if (!res.data.data.isDraft && res.data.data.blokchainId) {
-        this.props.contract
-          .eventTicketSoldCount(res.data.data.blokchainId)
-          .then((res2) => {
-            this.setState({
-              ticketsSold: parseInt(res2, 16),
-            });
-          });
-      }
+      // if (!res.data.data.isDraft && res.data.data.eventId) {
+      //   this.props.contract
+      //     .eventTicketSoldCount(res.data.data.eventId)
+      //     .then((res2) => {
+      //       this.setState({
+      //         ticketsSold: parseInt(res2, 16),
+      //       });
+      //     });
+      // }
+      this.props.setLoading(false);
     });
   }
 
@@ -72,6 +75,7 @@ class Event extends Component {
                   />
                   <span>{this.state.event.ownerId.name ?? "Owner"}</span>
                 </Link>
+                <div className="mt-2">{this.state.event.description}</div>
                 <hr />
                 <div>
                   <span>
@@ -79,7 +83,7 @@ class Event extends Component {
                   </span>
                 </div>
                 <div>
-                  <span>Tickets sold: {this.state.ticketsSold}</span>
+                  <span>Tickets sold: {this.state.event.ticketSoldCount}</span>
                 </div>
                 <div>
                   <span>Ticket price: {this.state.event.pricePerTicket}</span>
@@ -89,10 +93,11 @@ class Event extends Component {
                   <div className="tickets">
                     <h5>Mint your own ticket for this event below now</h5>
                     <div className="grid-container">
-                      {this.state.event.ticketDesigns.map((design) => {
+                      {this.state.event.ticketDesigns.map((design, i) => {
                         return (
                           <Link
-                            to={`/tickets/${design._id}`}
+                            key={i}
+                            to={`/tickets/design/${design._id}`}
                             className="ticket"
                           >
                             <img
@@ -128,7 +133,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDipatchToProps = (dispatch) => {
-  return {};
+  return {
+    setLoading: (payload = true) => dispatch(setLoading(payload)),
+  };
 };
 
 export default connect(mapStateToProps, mapDipatchToProps)(Event);

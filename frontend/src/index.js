@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
+  <Provider store={store.store}>
     <ToastContainer limit="1" autoClose={2000} position="bottom-right" />
     <App />
   </Provider>

@@ -1,4 +1,5 @@
 const Utils = require("../../helper/utils");
+const TicketModel = require("../ticket/ticketModel");
 const TicketDesignModel = require("../ticketDesign/ticketDesignModel");
 const EventModel = require("./eventModel");
 
@@ -14,7 +15,11 @@ EventCtr.create = async (req, res) => {
       image,
       ticketDesignIsDefault,
       ticketImage,
+      eventURI,
+      eventDescription,
     } = req.body;
+
+    const chainId = req.headers.chainid ?? null;
 
     const createNewEvent = new EventModel({
       ownerId: req.userData._id,
@@ -22,6 +27,9 @@ EventCtr.create = async (req, res) => {
       maxTicketSupply: maxTicketSupply,
       pricePerTicket: pricePerTicket,
       image: image,
+      eventURI: eventURI,
+      description: eventDescription,
+      chainId: chainId,
     });
 
     const saveEvent = await createNewEvent.save();
@@ -61,6 +69,11 @@ EventCtr.getEvent = async (req, res) => {
       )
     );
 
+    getEventDetails.ticketSoldCount = await TicketModel.countDocuments({
+      eventId: req.params.id,
+      isDraft: false,
+    });
+
     getEventDetails.ticketDesigns = await TicketDesignModel.find({
       eventId: getEventDetails._id,
     });
@@ -92,7 +105,7 @@ EventCtr.getEvents = async (req, res) => {
   try {
     let getEvents = JSON.parse(
       JSON.stringify(
-        await EventModel.find({ image: { $ne: null } })
+        await EventModel.find({ image: { $ne: null }, isDraft: false })
           .sort(sortQuery)
           .limit(req.query.take && req.query.take < 21 ? +req.query.take : 20)
           .populate({

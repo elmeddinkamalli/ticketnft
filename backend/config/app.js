@@ -8,6 +8,12 @@ const l10n = require("jm-ez-l10n");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const formData = require("express-form-data");
+const os = require("os");
+const options = {
+  uploadDir: os.tmpdir(),
+  autoClean: true,
+};
 
 const app = express();
 
@@ -24,6 +30,15 @@ app.use(l10n.enableL10NExpress);
 app.set("port", process.env.PORT);
 app.use(bodyParser.json({ limit: "1gb" }));
 app.use(bodyParser.urlencoded({ extended: false, limit: "1gb" }));
+// parse data with connect-multiparty.
+app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+app.use(formData.format());
+// change the file objects to fs.ReadStream
+app.use(formData.stream());
+// union the body and the files
+app.use(formData.union());
+
 app.use(cors());
 app.use(require("../route.js"));
 

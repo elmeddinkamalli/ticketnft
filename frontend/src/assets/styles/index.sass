@@ -11,6 +11,21 @@ body
     overflow-x: hidden
     background: #001232
 
+.grayed-bg
+    display: none
+    position: fixed
+    inset: 0px
+    z-index: 250
+    background: rgba(0, 0, 0, 0.7)
+    padding: 30px
+
+    &.active
+        display: block
+    .spinner
+        position: fixed
+        top: 50%
+        left: 50%
+
 // Pages
 @import "./scss/pages/Dashboard"
 @import "./scss/pages/EventsCreate"
@@ -23,3 +38,4 @@ body
 // Components
 @import "./scss/components/Header"
 @import "./scss/components/SlickSlider"
+@import "./scss/components/PermissionPopup"

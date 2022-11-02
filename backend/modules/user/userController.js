@@ -7,6 +7,7 @@ const jwtUtil = require("../../helper/jwtUtils");
 const TicketModel = require("../ticket/ticketModel");
 const EventModel = require("../event/eventModel");
 let formidable = require("formidable");
+var path = require("path");
 let fs = require("fs");
 
 const UserCtr = {};
@@ -180,6 +181,7 @@ UserCtr.getSingleUserDetails = async (req, res) => {
 
     getUserDetails.tickets = await TicketModel.find({
       ownerId: req.params.userId,
+      $or: [{ burned: { $exists: false } }, { burned: { $eq: false } }],
     }).populate({
       path: "eventId",
     });
@@ -204,6 +206,7 @@ UserCtr.getSingleUserTickets = async (req, res) => {
   try {
     const getUserTickets = await TicketModel.find({
       ownerId: req.params.userId,
+      $or: [{ burned: { $exists: false } }, { burned: { $eq: false } }],
     }).populate({
       path: "eventId",
     });
@@ -225,39 +228,33 @@ UserCtr.getSingleUserTickets = async (req, res) => {
 
 UserCtr.updateUserDetails = async (req, res) => {
   try {
-    let form = new formidable.IncomingForm();
-
     let avatar;
 
-    form.parse(req, async function (error, fields, file) {
-      if (file.profile) {
-        let filepath = file.profile.filepath;
-        let newpath = __basedir + "/uploads/avatars/";
-        newpath += file.profile.originalFilename;
+    if (req.body.profile) {
+      avatar = new Date().getTime() + path.extname(req.body.profile.path);
 
-        //Copy the uploaded file to a custom folder
-        fs.rename(filepath, newpath, function () {
-          avatar = file.profile.originalFilename;
-        });
+      let filepath = req.body.profile.path;
+      let newpath = __basedir + "/uploads/avatars/";
+      newpath += avatar;
 
-        let user = await UserModel.findById(req.userData._id);
-        user.name = fields.fullname;
-        user.username = fields.username;
-        user.email = fields.email;
-        user.profile = avatar;
-        await user.save();
-      }
-    });
+      //Copy the uploaded file to a custom folder
+      fs.rename(filepath, newpath, () => {});
+    }
 
-    // console.log(res);
+    let user = await UserModel.findById(req.userData._id);
+    if (req.body.fullname) user.name = req.body.fullname;
+    if (req.body.username) user.username = req.body.username;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.profile) user.profile = avatar;
+    await user.save();
 
     return res.status(200).json({
-      message: "SINGLE_USER_TICKETS",
+      message: "SINGLE_USER",
       status: true,
       data: "success",
     });
   } catch (err) {
-    Utils.echoLog("Erro in getUserTickets creator");
+    Utils.echoLog("Erro in updateUserDetails");
     return res.status(500).json({
       message: req.t("DB_ERROR"),
       status: true,

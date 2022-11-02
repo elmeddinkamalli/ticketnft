@@ -7,8 +7,12 @@ const TicketMiddleware = require("./ticketMiddleware");
 const ticketRoute = express.Router();
 
 // Get single ticket design
-const getTicketDesign = [TicketCtr.getTicketDesign];
+const getTicketDesign = [Auth.checkIsAuthenticated, TicketCtr.getTicketDesign];
 ticketRoute.get("/design/:id", getTicketDesign);
+
+// Get single ticket
+const getTicket = [Auth.isAuthenticatedUser, TicketCtr.getTicket];
+ticketRoute.get("/:id", getTicket);
 
 // Create user ticket
 const createTicket = [

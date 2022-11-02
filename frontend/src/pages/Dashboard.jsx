@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import MySlider from "../components/page-contents/Slider";
 import $axios from "../helpers/axios";
+import { setLoading } from "../redux/features/userSlice";
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
@@ -11,11 +13,18 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    $axios.get("/events/list?createdAt=desc&take=6").then((res) => {
-      this.setState({
-        upcomingEvents: res.data.data,
+    this.props.setLoading(true);
+    $axios
+      .get("/events/list?createdAt=desc&take=6")
+      .then((res) => {
+        this.setState({
+          upcomingEvents: res.data.data,
+        });
+        this.props.setLoading(false);
+      })
+      .catch((err) => {
+        this.props.setLoading(false);
       });
-    });
   }
 
   render() {
@@ -43,3 +52,15 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDipatchToProps = (dispatch) => {
+  return {
+    setLoading: (payload = true) => dispatch(setLoading(payload)),
+  };
+};
+
+export default connect(mapStateToProps, mapDipatchToProps)(Dashboard);

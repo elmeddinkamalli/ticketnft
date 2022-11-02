@@ -8,7 +8,10 @@ import $axios from "../helpers/axios";
 import { compressImage } from "../helpers/functions";
 import ipfs from "../helpers/ipfs";
 import DefaultTicketDesign from "../assets/static/ticket_design_to_mint.png";
+import { setLoading } from "../redux/features/userSlice";
+import { toast } from "react-toastify";
 const fileTypes = ["JPG", "PNG", "JPEG"];
+let stopUpdate = false;
 
 class EditProfile extends Component {
   constructor(props) {
@@ -23,6 +26,17 @@ class EditProfile extends Component {
     };
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    console.log(props);
+  }
+
+  componentDidUpdate() {
+    if (this.props.user && !stopUpdate) {
+      stopUpdate = true;
+      this.setState({
+        preview: this.props.user.profile,
+      });
+    }
   }
 
   async uploadPhoto(file) {
@@ -33,22 +47,23 @@ class EditProfile extends Component {
   }
 
   async handleSubmit() {
+    this.props.setLoading(true);
     const formData = new FormData();
-    formData.append("profile", this.state.uploadedPhoto);
-    formData.append("fullname", this.state.fullname);
-    formData.append("username", this.state.username);
-    formData.append("email", this.state.email);
+    if (this.state.uploadedPhoto)
+      formData.append("profile", this.state.uploadedPhoto);
+    if (this.state.fullname) formData.append("fullname", this.state.fullname);
+    if (this.state.username) formData.append("username", this.state.username);
+    if (this.state.email) formData.append("email", this.state.email);
 
     $axios
-      .post("/user/edit", formData
-      // {
-      //   profile: this.state.uploadedPhoto,
-      //   fullname: this.state.fullname,
-      //   username: this.state.username,
-      //   email: this.state.email,
-      // }
-      )
-      .then(console.log);
+      .post("/user/edit", formData)
+      .then((res) => {
+        this.props.setLoading(false);
+        toast.success("Updated successfully!");
+      })
+      .catch((err) => {
+        this.props.setLoading(true);
+      });
   }
 
   render() {
@@ -69,6 +84,7 @@ class EditProfile extends Component {
                   type="text"
                   name="fullname"
                   id="fullname"
+                  defaultValue={this.props.user?.name ?? ""}
                   placeholder="Enter event name"
                   onChange={(e) => {
                     this.setState({
@@ -86,6 +102,7 @@ class EditProfile extends Component {
                   type="text"
                   name="username"
                   id="username"
+                  defaultValue={this.props.user?.username ?? ""}
                   placeholder="Enter event name"
                   onChange={(e) => {
                     this.setState({
@@ -103,6 +120,7 @@ class EditProfile extends Component {
                   type="email"
                   name="Email"
                   id="Email"
+                  defaultValue={this.props.user?.email ?? ""}
                   placeholder="Enter event name"
                   onChange={(e) => {
                     this.setState({
@@ -175,7 +193,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDipatchToProps = (dispatch) => {
-  return {};
+  return {
+    setLoading: (payload = true) => dispatch(setLoading(payload)),
+  };
 };
 
 export default connect(mapStateToProps, mapDipatchToProps)(EditProfile);

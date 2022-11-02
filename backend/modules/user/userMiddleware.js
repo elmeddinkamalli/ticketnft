@@ -13,7 +13,7 @@ UserMiddleware.signUpValidator = (req, res, next) => {
       size: 15,
     }).unknown(true),
     bio: Joi.string().allow(null),
-    username: Joi.string().allow(null),
+    username: Joi.string().alphanum().min(3).max(30).allow(null),
     cover: Joi.string().allow(null),
   });
   validate.validateRequest(req, res, next, schema);

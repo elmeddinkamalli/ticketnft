@@ -8,6 +8,9 @@ import $axios from "../helpers/axios";
 import { compressImage } from "../helpers/functions";
 import ipfs from "../helpers/ipfs";
 import DefaultTicketDesign from "../assets/static/ticket_design_to_mint.png";
+import { setLoading } from "../redux/features/userSlice";
+import { serializeError } from "eth-rpc-errors";
+import { toast } from "react-toastify";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -68,7 +71,12 @@ class EventsCreate extends Component {
   }
 
   async handleSubmit() {
-    if (!this.validateSubmit()) return false;
+    this.props.setLoading(true);
+
+    if (!this.validateSubmit()) {
+      this.props.setLoading(false);
+      return false;
+    }
 
     let ipfsHashTicketDesign;
     let ipfsHashEventImage = await ipfs.add(this.state.uploadedPhoto, {
@@ -101,6 +109,14 @@ class EventsCreate extends Component {
       });
     }
 
+    const eventURI = await ipfs.pinJson({
+      name: this.state.eventName,
+      description: this.state.eventDescription,
+      image: ipfsHashEventImage.path,
+      ticketImage: ipfsHashTicketDesign.path,
+      isDefaultDesign: this.state.ticketDesignIsDefault,
+    });
+
     $axios
       .post("/events/create", {
         eventName: this.state.eventName,
@@ -110,11 +126,13 @@ class EventsCreate extends Component {
         image: ipfsHashEventImage.path,
         ticketDesignIsDefault: this.state.ticketDesignIsDefault,
         ticketImage: ipfsHashTicketDesign.path,
+        eventURI: eventURI,
       })
       .then((res) => {
         const draftEventId = res.data.data._id;
         const parameters = [
-          this.state.eventName,
+          eventURI,
+          draftEventId,
           this.state.maxTicketSupply,
           this.state.pricePerTicket,
           {
@@ -127,8 +145,14 @@ class EventsCreate extends Component {
             console.log(res2);
             return (window.location.href = `/events/${draftEventId}`);
           })
-          .catch(console.log);
+          .catch((err) => {
+            const serializedError = serializeError(err);
+            toast.error(serializedError.data.originalError.reason);
+
+            this.props.setLoading(false);
+          });
       });
+    this.props.setLoading(false);
   }
 
   render() {
@@ -365,7 +389,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDipatchToProps = (dispatch) => {
-  return {};
+  return {
+    setLoading: (payload = true) => dispatch(setLoading(payload)),
+  };
 };
 
 export default connect(mapStateToProps, mapDipatchToProps)(EventsCreate);

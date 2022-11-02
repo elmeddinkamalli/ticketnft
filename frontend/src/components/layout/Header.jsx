@@ -53,11 +53,8 @@ class Header extends Component {
               Create event
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item>
-              <button
-                className="btn text-danger nowrap p-0 m-0"
-                onClick={() => this.props.logout()}
-              >
+            <NavDropdown.Item onClick={() => this.props.logout()}>
+              <button className="btn text-danger nowrap p-0 m-0">
                 Log out
               </button>
             </NavDropdown.Item>

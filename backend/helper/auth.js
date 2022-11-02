@@ -25,7 +25,6 @@ auth.isAuthenticatedUser = async (req, res, next) => {
   } else {
     return errorUtil.notAuthenticated(res, req);
   }
-  return errorUtil.notAuthenticated(res, req);
 };
 
 auth.isAdmin = async (req, res, next) => {
@@ -56,6 +55,5 @@ auth.checkIsAuthenticated = async (req, res, next) => {
   } else {
     return errorUtil.notAuthenticated(res, req);
   }
-  return errorUtil.notAuthenticated(res, req);
 };
 module.exports = auth;

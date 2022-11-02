@@ -7,6 +7,7 @@ import Events from "../pages/Events";
 import EventsCreate from "../pages/EventsCreate";
 import Profile from "../pages/Profile";
 import Ticket from "../pages/Ticket";
+import TicketDesign from "../pages/TicketDesign";
 
 export default class UserPanelRoutes extends Component {
   render() {
@@ -18,6 +19,7 @@ export default class UserPanelRoutes extends Component {
           <Route path={"/events"} element={<Events />} />
           <Route path={"/events/create"} element={<EventsCreate />} />
           <Route path={"/events/:id"} element={<Event />} />
+          <Route path={"/tickets/design/:id"} element={<TicketDesign />} />
           <Route path={"/tickets/:id"} element={<Ticket />} />
           <Route path={"/profile/edit"} element={<EditProdile />} />
           <Route path={"/profile/:id"} element={<Profile />} />

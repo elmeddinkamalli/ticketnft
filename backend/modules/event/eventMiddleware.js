@@ -17,10 +17,13 @@ EventMiddleware.validateAdd = async (req, res, next) => {
   const schema = Joi.object({
     ownerId: Joi.string(),
     eventName: Joi.string().required(),
+    eventDescription: Joi.string(),
     maxTicketSupply: Joi.number().required(),
     pricePerTicket: Joi.number().required(),
     image: Joi.string().required(),
     ticketImage: Joi.string().required(),
+    eventURI: Joi.string().required(),
+    // chainId: Joi.number().required(),
   });
   validate.validateRequest(req, res, next, schema);
 };

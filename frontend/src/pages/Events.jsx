@@ -1,21 +1,30 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import $axios from "../helpers/axios";
+import { setLoading } from "../redux/features/userSlice";
 
-export default class Events extends Component {
-  constructor() {
-    super();
+class Events extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       events: null,
     };
   }
 
   componentDidMount() {
-    $axios.get("/events/list?createdAt=desc").then((res) => {
-      this.setState({
-        events: res.data.data,
+    this.props.setLoading(true);
+    $axios
+      .get("/events/list?createdAt=desc")
+      .then((res) => {
+        this.setState({
+          events: res.data.data,
+        });
+        this.props.setLoading(false);
+      })
+      .catch((err) => {
+        this.props.setLoading(false);
       });
-    });
   }
   render() {
     return (
@@ -33,12 +42,9 @@ export default class Events extends Component {
                   <img className="w-100 h-100" src={event.image} alt="" />
                   <div className="event-item-info-section">
                     <h5 className="text-white">{event.eventName}</h5>
-                    <Link
-                      to={`/events/${event._id}`}
-                      className="btn btn-sm btn-outline-info"
-                    >
+                    <h5 className="btn btn-sm btn-outline-info">
                       Mint your ticket now
-                    </Link>
+                    </h5>
                   </div>
                 </Link>
               );
@@ -51,3 +57,15 @@ export default class Events extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDipatchToProps = (dispatch) => {
+  return {
+    setLoading: (payload = true) => dispatch(setLoading(payload)),
+  };
+};
+
+export default connect(mapStateToProps, mapDipatchToProps)(Events);

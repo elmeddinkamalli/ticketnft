@@ -21,8 +21,8 @@ userRoute.get("/genrateNonce/:address", genrateNonce);
 // update single user Details
 const updateUserDetails = [
   Auth.isAuthenticatedUser,
-  UserMiddleware.signUpValidator,
   UserMiddleware.checkUsernameAlreadyAdded,
+  UserMiddleware.signUpValidator,
   UserCtr.updateUserDetails,
 ];
 userRoute.post("/edit", updateUserDetails);

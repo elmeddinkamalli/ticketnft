@@ -11,6 +11,11 @@ const decryptProperty = function (value) {
 
 const ticketSchema = new Schema(
   {
+    uniqueId: {
+      type: Number,
+      unique: true,
+      required: true,
+    },
     eventId: {
       type: Schema.Types.ObjectId,
       ref: "events",
@@ -24,9 +29,13 @@ const ticketSchema = new Schema(
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: "users",
-      required: true,
+      required: false,
     },
-    metadataCID: {
+    ownerWalletAddress: {
+      type: String,
+      required: false,
+    },
+    metadataURI: {
       type: String,
       default: null,
       get: decryptProperty,
@@ -41,6 +50,18 @@ const ticketSchema = new Schema(
       required: true,
       default: true,
     },
+    chainId: {
+      type: Number,
+      required: true,
+    },
+    tokenId: {
+      type: Number,
+      required: false,
+    },
+    burned: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   {
@@ -51,4 +72,8 @@ const ticketSchema = new Schema(
   }
 );
 
+ticketSchema.index(
+  { tokenId: 1, chainId: 1 },
+  { unique: true, partialFilterExpression: { tokenId: { $type: "string" } } }
+);
 module.exports = mongoose.model("tickets", ticketSchema);

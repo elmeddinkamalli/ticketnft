@@ -22,7 +22,7 @@ export default class MySlider extends Component {
       dots: false,
       infinite: true,
       speed: 500,
-      slidesToShow: 3,
+      slidesToShow: this.props.data.length > 2 ? 3 : 2,
       slidesToScroll: 1,
       cclassName: "center",
       centerMode: true,
@@ -70,12 +70,9 @@ export default class MySlider extends Component {
                 <img className="w-100 h-100" src={event.image} alt="" />
                 <div className="slider-item-info-section">
                   <h5 className="text-white">{event.eventName}</h5>
-                  <Link
-                    to={`/events/${event._id}`}
-                    className="btn btn-sm btn-outline-info"
-                  >
+                  <h5 className="btn btn-sm btn-outline-info">
                     Mint your ticket now
-                  </Link>
+                  </h5>
                 </div>
               </Link>
             );

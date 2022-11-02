@@ -8,6 +8,7 @@ body {
 *::after {
   margin: 0;
   box-sizing: border-box;
+  font-family: "Sofia Pro", sans-serif;
 }
 
 input[type="text"],

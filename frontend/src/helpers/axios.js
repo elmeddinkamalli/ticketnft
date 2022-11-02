@@ -1,9 +1,12 @@
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { currentChainId } from "./web3";
 
 const $axios = axios.create({
   headers: {
     "x-auth-token": localStorage.getItem("authToken"),
+    chainId: currentChainId ?? localStorage.getItem("chainId"),
   },
   "content-type": "application/json",
   baseURL: process.env.REACT_APP_BASE_API_URL,

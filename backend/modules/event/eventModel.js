@@ -14,7 +14,28 @@ const eventSchema = new Schema(
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required: false,
+      default: null,
+    },
+    eventId: {
+      type: Number,
+      default: null,
+      required: false,
+    },
+    chainId: {
+      type: Number,
       required: true,
+    },
+    eventURI: {
+      type: String,
+      required: false,
+      default: null,
+      get: decryptProperty,
+    },
+    description: {
+      type: String,
+      required: false,
+      default: null,
     },
     eventName: {
       type: String,
@@ -49,6 +70,11 @@ const eventSchema = new Schema(
       getters: true,
     },
   }
+);
+
+eventSchema.index(
+  { eventId: 1, chainId: 1 },
+  { unique: true, partialFilterExpression: { eventId: { $type: "string" } } }
 );
 
 module.exports = mongoose.model("events", eventSchema);

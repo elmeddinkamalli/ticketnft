@@ -35,7 +35,7 @@ export const setWeb3 = createAsyncThunk(
       }
       web3Object.web3 = new ethers.providers.Web3Provider(window.ethereum);
       web3Object.web3ForQuery = new ethers.Contract(
-        process.env.REACT_APP_BNB_CONTRACT_ADDRESS,
+        process.env.REACT_APP_ETH_CONTRACT_ADDRESS,
         ticketnftAbi,
         web3Object.web3.getSigner()
       );

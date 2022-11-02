@@ -322,25 +322,6 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "ticketId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "centralizedId",
-        "type": "uint256"
-      }
-    ],
-    "name": "creatingTicket",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "eventId",
         "type": "uint256"
       }
@@ -368,6 +349,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "centralizedId",
         "type": "uint256"
       }
     ],
@@ -419,6 +406,11 @@
         "internalType": "string",
         "name": "_tokenURI",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_centralizedId",
+        "type": "uint256"
       }
     ],
     "name": "mintTicketForAddress",
