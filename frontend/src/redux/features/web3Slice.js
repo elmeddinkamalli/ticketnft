@@ -67,4 +67,6 @@ export const web3Slice = createSlice({
   },
 });
 
+export const { isValidChainId } = web3Slice.actions;
+
 export default web3Slice.reducer;

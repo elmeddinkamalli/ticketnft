@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Button, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import { currentChainId, isValidChainId } from "../../helpers/web3";
 import { connectToWallet, logout } from "../../redux/features/userSlice";
 import LoginModal from "../page-contents/LoginModal";
+import SwitchNetwork from "../page-contents/SwitchNetwork";
 
 class Header extends Component {
   constructor(props) {
@@ -133,6 +135,7 @@ class Header extends Component {
             <span>TicketNFT</span>
           </Link>
           <div className="align-items-center d-flex">
+            {!isValidChainId() && <SwitchNetwork />}
             <ul className="d-flex flex-row navbar-nav mr-5">
               {this.headerLinks()}
             </ul>

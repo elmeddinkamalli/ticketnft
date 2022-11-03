@@ -201,11 +201,38 @@ class TicketDesign extends Component {
                   </span>
                 </div>
                 <hr />
-                {!this.state.ticket.eventId.isDraft &&
-                <div>
-                  {this.state.ticket.myTicket ? (
-                    this.state.ticket.myTicket.isDraft ? (
-                      <>
+                {!this.state.ticket.eventId.isDraft && (
+                  <div>
+                    {this.state.ticket.myTicket ? (
+                      this.state.ticket.myTicket.isDraft ? (
+                        <>
+                          <button
+                            className="btn btn-primary"
+                            type="button"
+                            disabled
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            <span className="sr-only ml-2">Confirming...</span>
+                          </button>
+                          <span className="badge badge-warning text-bg-danger ml-4">
+                            DRAFT
+                          </span>
+                        </>
+                      ) : (
+                        <Link
+                          to={`/tickets/${this.state.ticket.myTicket._id}`}
+                          type="button"
+                          className="btn btn-outline-success"
+                        >
+                          BOUGHT
+                        </Link>
+                      )
+                    ) : this.props.user ? (
+                      this.state.inProgress ? (
                         <button
                           className="btn btn-primary"
                           type="button"
@@ -216,52 +243,26 @@ class TicketDesign extends Component {
                             role="status"
                             aria-hidden="true"
                           ></span>
-                          <span className="sr-only ml-2">Confirming...</span>
+                          <span className="sr-only ml-2">In progress...</span>
                         </button>
-                        <span className="badge badge-warning text-bg-danger ml-4">
-                          DRAFT
-                        </span>
-                      </>
-                    ) : (
-                      <Link
-                        to={`/tickets/${this.state.ticket.myTicket._id}`}
-                        type="button"
-                        className="btn btn-outline-success"
-                      >
-                        BOUGHT
-                      </Link>
-                    )
-                  ) : this.props.user ? (
-                    this.state.inProgress ? (
-                      <button
-                        className="btn btn-primary"
-                        type="button"
-                        disabled
-                      >
-                        <span
-                          className="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="sr-only ml-2">In progress...</span>
-                      </button>
+                      ) : (
+                        <button
+                          className="btn btn-outline-info"
+                          onClick={this.mintTicket}
+                        >
+                          Mint your ticket now
+                        </button>
+                      )
                     ) : (
                       <button
-                        className="btn btn-outline-info"
-                        onClick={this.mintTicket}
+                        className="btn btn-outline-warning"
+                        onClick={() => this.props.connectToWallet(true)}
                       >
-                        Mint your ticket now
+                        Login to mint ticket
                       </button>
-                    )
-                  ) : (
-                    <button
-                      className="btn btn-outline-warning"
-                      onClick={() => this.props.connectToWallet(true)}
-                    >
-                      Login to mint ticket
-                    </button>
-                  )}
-                </div>}
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ) : (

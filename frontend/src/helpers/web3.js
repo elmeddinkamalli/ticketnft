@@ -42,8 +42,15 @@ const getCurrentChainId = async () => {
 
 let currentChainId;
 (async function () {
-  console.log(await getCurrentChainId());
   currentChainId = await getCurrentChainId();
 })();
 
-export { enableMetamask, getCurrentChainId, currentChainId };
+const isValidChainId = (chainId) => {
+  let compareWith = currentChainId;
+  if (chainId) {
+    compareWith = chainId;
+  }
+  return [+process.env.REACT_APP_ETH_CHAIN_ID].includes(+compareWith);
+};
+
+export { enableMetamask, getCurrentChainId, currentChainId, isValidChainId };

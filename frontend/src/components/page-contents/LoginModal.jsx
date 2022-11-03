@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, CloseButton, Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { connectToWallet } from "../../redux/features/userSlice";
 
@@ -13,31 +13,31 @@ class LoginModal extends Component {
       <Modal
         show={this.props.isLoginModalActive}
         onHide={this.props.toggleLoginModal}
+        className="login-modal"
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Header className="border-0">
+          <Modal.Title>Available wallets</Modal.Title>
+          <CloseButton variant="white" onClick={this.props.toggleLoginModal} />
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="pb-4">
           <button
-            className="btn btn-outline-info"
-            onClick={() =>
+            className="btn btn-outline-info w-100 text-left"
+            onClick={() => {
               this.props.connectToWallet({
                 isWalletConnect: false,
                 needNonce: true,
-              })
-            }
+              });
+              this.props.toggleLoginModal();
+            }}
           >
-            Login
+            <img
+              src="/static/metamask-sm.png"
+              alt="metamask"
+              className="mr-3"
+            />
+            <span>Metamask</span>
           </button>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.props.toggleLoginModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={this.props.toggleLoginModal}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
       </Modal>
     );
   }
