@@ -111,7 +111,22 @@ cronTasks.fetchDetailsFromIpfs = async (id) => {
     let response = await fetch(event.eventURI);
     response = await response.json();
     event.image = response.image.replace("https://ipfs.io/ipfs/", "");
-    event.name = response.name;
+    event.eventName = response.name;
+    event.description = response.description;
+
+    let eventDesign = await TicketDesignModel.findOne({
+        eventId: event._id
+      });
+
+    if(!eventDesign){
+      eventDesign = await TicketDesignModel({
+        image: response.ticketImage,
+        isDefault: false,
+        eventId: event._id
+      }).save();
+    }
+
+    event.designId = eventDesign;
 
     await event.save();
   } catch (error) {
