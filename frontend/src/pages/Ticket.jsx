@@ -110,7 +110,7 @@ class Ticket extends Component {
                 </div>
                 <div>
                   <span>
-                    Ticket price: {this.state.ticket.eventId.pricePerTicket}
+                  Ticket price: {ethers.utils.formatEther(this.state.ticket.eventId.pricePerTicket, "wei")} ETH
                   </span>
                 </div>
                 <hr />

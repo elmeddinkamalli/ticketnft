@@ -49,7 +49,7 @@ module.exports = {
       },
       imageLoaderConfiguration,
       {
-        test: /\.(png|jpg)$/,
+        test: /\.(png|jpg|gif)$/,
         loader: "url-loader",
       },
     ],

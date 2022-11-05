@@ -22,7 +22,7 @@ export default class MySlider extends Component {
       dots: false,
       infinite: true,
       speed: 500,
-      slidesToShow: this.props.data.length > 2 ? 3 : 2,
+      slidesToShow: this.props.data.length > 2 ? 3 : this.props.data.length,
       slidesToScroll: 1,
       cclassName: "center",
       centerMode: true,

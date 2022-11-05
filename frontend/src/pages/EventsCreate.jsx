@@ -11,6 +11,7 @@ import DefaultTicketDesign from "../assets/static/ticket_design_to_mint.png";
 import { setLoading } from "../redux/features/userSlice";
 import { serializeError } from "eth-rpc-errors";
 import { toast } from "react-toastify";
+import { ethers } from "ethers";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -240,7 +241,7 @@ class EventsCreate extends Component {
                   placeholder="Enter value"
                   onChange={(e) => {
                     this.setState({
-                      pricePerTicket: e.target.value,
+                      pricePerTicket: parseInt(ethers.utils.parseUnits(e.target.value,"ether")),
                     });
                   }}
                 />

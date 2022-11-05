@@ -30,16 +30,6 @@ class TicketDesign extends Component {
       this.setState({
         ticket: res.data.data,
       });
-
-      // if (!res.data.data.eventId.isDraft && res.data.data.eventId.eventId) {
-      //   this.props.contract
-      //     .eventTicketSoldCount(res.data.data.eventId.eventId)
-      //     .then((res2) => {
-      //       this.setState({
-      //         ticketsSold: parseInt(res2, 16),
-      //       });
-      //     });
-      // }
     });
     this.props.setLoading(false);
   }
@@ -81,9 +71,7 @@ class TicketDesign extends Component {
   }
 
   componentDidUpdate() {
-    // this.props.setLoading(true);
     if (this.state.generatedImage) {
-      // this.props.setLoading(false);
       return;
     }
     this.generatedImage();
@@ -197,7 +185,7 @@ class TicketDesign extends Component {
                 </div>
                 <div>
                   <span>
-                    Ticket price: {this.state.ticket.eventId.pricePerTicket}
+                    Ticket price: {ethers.utils.formatEther(this.state.ticket.eventId.pricePerTicket, "wei")} ETH
                   </span>
                 </div>
                 <hr />
