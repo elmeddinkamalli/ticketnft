@@ -19,7 +19,7 @@ $axios.interceptors.response.use(
     } else if (response.config.method === "put") {
       toast.success("Updated Successfully!");
     }
-    toast.clearWaitingQueue()
+    toast.clearWaitingQueue();
     return response;
   },
   (error) => {
@@ -36,7 +36,7 @@ $axios.interceptors.response.use(
     } else {
       toast.error("Something went wrong");
     }
-    toast.clearWaitingQueue()
+    toast.clearWaitingQueue();
     throw error;
   }
 );

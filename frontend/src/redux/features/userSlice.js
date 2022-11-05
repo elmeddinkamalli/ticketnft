@@ -73,7 +73,7 @@ export const getUserDetails = createAsyncThunk(
         requestToGetAccounts: payload.requestToGetAccounts,
       })
     );
-    if(localStorage.getItem("authToken")){
+    if (localStorage.getItem("authToken")) {
       return await $axios.get("user/userDetails");
     }
     return false;

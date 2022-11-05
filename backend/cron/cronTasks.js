@@ -115,14 +115,14 @@ cronTasks.fetchDetailsFromIpfs = async (id) => {
     event.description = response.description;
 
     let eventDesign = await TicketDesignModel.findOne({
-        eventId: event._id
-      });
+      eventId: event._id,
+    });
 
-    if(!eventDesign){
+    if (!eventDesign) {
       eventDesign = await TicketDesignModel({
         image: response.ticketImage,
         isDefault: false,
-        eventId: event._id
+        eventId: event._id,
       }).save();
     }
 

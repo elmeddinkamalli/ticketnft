@@ -86,7 +86,14 @@ class Event extends Component {
                   <span>Tickets sold: {this.state.event.ticketSoldCount}</span>
                 </div>
                 <div>
-                  <span>Ticket price: {this.state.event.pricePerTicket}</span>
+                  <span>
+                    Ticket price:{" "}
+                    {ethers.utils.formatEther(
+                      this.state.event.pricePerTicket,
+                      "wei"
+                    )}{" "}
+                    ETH
+                  </span>
                 </div>
                 <hr />
                 {this.state.event.ticketDesigns ? (

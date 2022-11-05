@@ -241,7 +241,9 @@ class EventsCreate extends Component {
                   placeholder="Enter value"
                   onChange={(e) => {
                     this.setState({
-                      pricePerTicket: parseInt(ethers.utils.parseUnits(e.target.value,"ether")),
+                      pricePerTicket: parseInt(
+                        ethers.utils.parseUnits(e.target.value, "ether")
+                      ),
                     });
                   }}
                 />
