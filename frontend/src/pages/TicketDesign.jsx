@@ -37,31 +37,56 @@ class TicketDesign extends Component {
 
   async generatedImage() {
     var canvas = document.getElementById("Canvatext");
+    if (!canvas || !this.state.ticket) return;
 
-    let firstText = this.state.ticket?.eventId.eventName;
+    let firstText;
+    if (this.state.ticket.isDefault) {
+      firstText = this.state.ticket?.eventId.eventName;
+    }
     let secondText = yourId;
-    if (!canvas || !firstText) return;
     var context = canvas.getContext("2d");
     var imageObj = new Image();
+    const _this = this;
     imageObj.onload = function () {
       context.canvas.width = this.width;
-      context.canvas.height = this.height;
+      if (_this.state.ticket.isDefault) {
+        context.canvas.height = this.height;
+      } else {
+        context.canvas.height = this.height + 100;
+      }
       context.drawImage(imageObj, 0, 0);
       context.font = "40pt Calibri";
-      context.fillText(
-        firstText,
-        (this.width * 20) / 100,
-        (this.height * 15) / 100
-      );
+      if (_this.state.ticket.isDefault) {
+        context.fillText(
+          firstText,
+          (this.width * 20) / 100,
+          (this.height * 15) / 100
+        );
+      } else {
+        context.beginPath();
+        context.rect(0, this.height, this.width, this.height + 100);
+        context.fillStyle = "white";
+        context.fill();
+        context.lineWidth = 7;
+        context.strokeStyle = "black";
+        context.stroke();
+        context.textAlign = "center";
+      }
+
       context.font = "50pt Open Sans";
       var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
       gradient.addColorStop("0", "#5704C2");
       gradient.addColorStop("1.0", "#FF0305");
       context.fillStyle = gradient;
+
       context.fillText(
         `#${secondText} ID`,
-        (this.width * 20) / 100,
-        (this.height * 25) / 100
+        !_this.state.ticket.isDefault
+          ? this.width / 2
+          : (this.width * 20) / 100,
+        !_this.state.ticket.isDefault
+          ? this.height + 75
+          : (this.height * 25) / 100
       );
     };
     imageObj.src = this.state.ticket.image;
@@ -128,8 +153,6 @@ class TicketDesign extends Component {
       });
   }
 
-  initMintButton() {}
-
   render() {
     if (
       this.state.ticket &&
@@ -163,11 +186,6 @@ class TicketDesign extends Component {
           {this.state.ticket ? (
             <div className="row w-100 ticket-details">
               <div className="col-4 left">
-                {/* <img
-                  className="w-100 ticket-image"
-                  src={this.state.ticket.image}
-                  alt="ticket image"
-                /> */}
                 <canvas
                   className="w-100 h-100 ticket-image"
                   id="Canvatext"

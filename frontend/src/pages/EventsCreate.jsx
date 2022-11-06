@@ -269,12 +269,12 @@ class EventsCreate extends Component {
                         pricePerTicket: parseInt(
                           ethers.utils.parseUnits(e.target.value, "ether")
                         ),
-                        errors: []
-                      },);
+                        errors: [],
+                      });
                     } catch (error) {
                       this.setState({
-                        errors: ["pricePerTicket"]
-                      })
+                        errors: ["pricePerTicket"],
+                      });
                     }
                   }}
                 />

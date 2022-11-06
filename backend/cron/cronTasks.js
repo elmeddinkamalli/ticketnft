@@ -37,12 +37,13 @@ cronTasks.getCreatedEvents = async (req, res, chainId) => {
     let getPastEvents;
     try {
       getPastEvents = await contract.getPastEvents("createNewEvent", {
-        fromBlock: +getLastBlock.createNewEvent,
+        // fromBlock: +getLastBlock.createNewEvent,
+        fromBlock: latestBlockNo - 100,
         toBlock: latestBlockNo,
       });
     } catch (error) {
       getPastEvents = await contract.getPastEvents("createNewEvent", {
-        fromBlock: latestBlockNo - 500,
+        fromBlock: latestBlockNo - 50,
         toBlock: latestBlockNo,
       });
     }
@@ -155,12 +156,13 @@ cronTasks.getCreatedTickets = async (req, res, chainId) => {
     let getPastEvents;
     try {
       getPastEvents = await contract.getPastEvents("mintingEventTicket", {
-        fromBlock: +getLastBlock.mintingEventTicket,
+        // fromBlock: +getLastBlock.mintingEventTicket,
+        fromBlock: latestBlockNo - 100,
         toBlock: latestBlockNo,
       });
     } catch (error) {
       getPastEvents = await contract.getPastEvents("mintingEventTicket", {
-        fromBlock: latestBlockNo - 5000,
+        fromBlock: latestBlockNo - 50,
         toBlock: latestBlockNo,
       });
     }
@@ -298,12 +300,13 @@ cronTasks.getBurningTickets = async (req, res, chainId) => {
     let getPastEvents;
     try {
       getPastEvents = await contract.getPastEvents("burningTicket", {
-        fromBlock: +getLastBlock.burningTicket,
+        // fromBlock: +getLastBlock.burningTicket,
+        fromBlock: latestBlockNo - 100,
         toBlock: latestBlockNo,
       });
     } catch (error) {
       getPastEvents = await contract.getPastEvents("burningTicket", {
-        fromBlock: latestBlockNo - 5000,
+        fromBlock: latestBlockNo - 50,
         toBlock: latestBlockNo,
       });
     }

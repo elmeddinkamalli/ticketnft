@@ -68,11 +68,11 @@ const eventSchema = new Schema(
     },
     saleStarts: {
       type: Number,
-      default: 0
+      default: 0,
     },
     saleEnds: {
       type: Number,
-      default: 0
+      default: 0,
     },
   },
 
