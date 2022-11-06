@@ -48,23 +48,21 @@ class TicketDesign extends Component {
     var imageObj = new Image();
     const _this = this;
     imageObj.onload = function () {
-      context.canvas.width = this.width;
+      const _width = this.width < 500 ? 500 : this.width;
+      const _height = this.height < 300 ? 300 : this.height;
+      context.canvas.width = _width;
       if (_this.state.ticket.isDefault) {
-        context.canvas.height = this.height;
+        context.canvas.height = _height;
       } else {
-        context.canvas.height = this.height + 100;
+        context.canvas.height = _height + 100;
       }
-      context.drawImage(imageObj, 0, 0);
+      context.drawImage(imageObj, 0, 0, _width, _height);
       context.font = "40pt Calibri";
       if (_this.state.ticket.isDefault) {
-        context.fillText(
-          firstText,
-          (this.width * 20) / 100,
-          (this.height * 15) / 100
-        );
+        context.fillText(firstText, (_width * 20) / 100, (_height * 15) / 100);
       } else {
         context.beginPath();
-        context.rect(0, this.height, this.width, this.height + 100);
+        context.rect(0, _height, _width, _height + 100);
         context.fillStyle = "white";
         context.fill();
         context.lineWidth = 7;
@@ -73,7 +71,11 @@ class TicketDesign extends Component {
         context.textAlign = "center";
       }
 
-      context.font = "50pt Open Sans";
+      if (_width < 700) {
+        context.font = "30pt Open Sans";
+      } else {
+        context.font = "50pt Open Sans";
+      }
       var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
       gradient.addColorStop("0", "#5704C2");
       gradient.addColorStop("1.0", "#FF0305");
@@ -81,12 +83,8 @@ class TicketDesign extends Component {
 
       context.fillText(
         `#${secondText} ID`,
-        !_this.state.ticket.isDefault
-          ? this.width / 2
-          : (this.width * 20) / 100,
-        !_this.state.ticket.isDefault
-          ? this.height + 75
-          : (this.height * 25) / 100
+        !_this.state.ticket.isDefault ? _width / 2 : (_width * 20) / 100,
+        !_this.state.ticket.isDefault ? _height + 75 : (_height * 25) / 100
       );
     };
     imageObj.src = this.state.ticket.image;
@@ -193,6 +191,10 @@ class TicketDesign extends Component {
             <div className="row w-100 ticket-details">
               <div className="col-4 left">
                 <canvas
+                  style={{
+                    minHeight: "400px !important",
+                    minWidth: "400px !important",
+                  }}
                   className="w-100 h-100 ticket-image"
                   id="Canvatext"
                 ></canvas>

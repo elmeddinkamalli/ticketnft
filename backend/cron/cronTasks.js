@@ -328,7 +328,7 @@ cronTasks.getBurningTickets = async (req, res, chainId) => {
       });
     }
   } catch (error) {
-    console.log(err);
+    console.log(error);
   }
 };
 
