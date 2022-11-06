@@ -138,7 +138,7 @@ class EventsCreate extends Component {
       saleEnds: saleEnds,
     });
 
-    $axios
+    await $axios
       .post("/events/create", {
         eventName: this.state.eventName,
         eventDescription: this.state.eventDescription,
@@ -151,7 +151,7 @@ class EventsCreate extends Component {
         saleStarts: saleStarts,
         saleEnds: saleEnds,
       })
-      .then((res) => {
+      .then(async (res) => {
         const draftEventId = res.data.data._id;
         const parameters = [
           eventURI,
@@ -164,9 +164,14 @@ class EventsCreate extends Component {
             value: 1000000000000000,
           },
         ];
-        this.props.contract
+        await this.props.contract
           .createEvent(...parameters)
           .then((res2) => {
+            localStorage.setItem(
+              "infoMessage",
+              "This would take some minutes. Please wait patiently for the confirmation!"
+            );
+            localStorage.setItem("hasInfoMessage", true);
             return (window.location.href = `/events/${draftEventId}`);
           })
           .catch((err) => {
@@ -175,6 +180,9 @@ class EventsCreate extends Component {
 
             this.props.setLoading(false);
           });
+      })
+      .catch((err) => {
+        this.props.setLoading(false);
       });
     this.props.setLoading(false);
   }

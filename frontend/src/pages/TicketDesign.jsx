@@ -141,6 +141,12 @@ class TicketDesign extends Component {
           image: ipfsHash.path,
           uniqueId: yourId,
         });
+        localStorage.setItem(
+          "infoMessage",
+          "This would take some minutes. Please wait patiently for the confirmation!"
+        );
+        localStorage.setItem("hasInfoMessage", true);
+        window.location.reload();
         this.props.setLoading(false);
       })
       .catch((err) => {

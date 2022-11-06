@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import InfoMessage from "./components/page-contents/InfoMessage";
 import Loading from "./components/page-contents/Loading";
 import Main from "./pages/Main";
 import {
@@ -31,6 +32,7 @@ function App() {
   return (
     <div className="App">
       <Loading />
+      {localStorage.getItem("hasInfoMessage") && <InfoMessage />}
       <Main />
     </div>
   );
