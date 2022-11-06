@@ -167,7 +167,6 @@ class EventsCreate extends Component {
         this.props.contract
           .createEvent(...parameters)
           .then((res2) => {
-            console.log(res2);
             return (window.location.href = `/events/${draftEventId}`);
           })
           .catch((err) => {

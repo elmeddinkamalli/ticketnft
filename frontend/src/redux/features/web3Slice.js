@@ -57,12 +57,11 @@ export const web3Slice = createSlice({
       state.chainId = action.payload;
     });
     builder.addCase(setWeb3.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.web3 = action.payload.web3;
       state.web3ForQuery = action.payload.web3ForQuery;
     });
     builder.addCase(setWeb3.rejected, (state, action) => {
-      console.log(action);
+      // console.log(action);
     });
   },
 });

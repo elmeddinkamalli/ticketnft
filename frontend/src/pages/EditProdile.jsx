@@ -26,8 +26,6 @@ class EditProfile extends Component {
     };
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
-    console.log(props);
   }
 
   componentDidUpdate() {

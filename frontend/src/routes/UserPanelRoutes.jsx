@@ -11,7 +11,6 @@ import TicketDesign from "../pages/TicketDesign";
 
 export default class UserPanelRoutes extends Component {
   render() {
-    console.log("test");
     return (
       <div className="contents px-2 px-sm-4">
         <Routes>

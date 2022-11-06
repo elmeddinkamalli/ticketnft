@@ -19,7 +19,6 @@ export async function compressImage(image) {
         },
       });
     } catch (error) {
-      console.log(error);
       reject(undefined);
     }
   });

@@ -7,7 +7,6 @@ const onChainChange = () => {
 
 const onAccountChange = () => {
   window.ethereum.on("accountsChanged", (accounts) => {
-    console.log(accounts);
     if (accounts) {
       localStorage.removeItem("authToken");
       window.location.reload();

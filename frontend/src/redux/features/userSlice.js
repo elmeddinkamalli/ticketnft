@@ -112,14 +112,12 @@ export const userSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(generateNonce.rejected, (state, action) => {
-      console.log(action);
       state.loading = false;
     });
     builder.addCase(generateNonce.fulfilled, (state, action) => {
       state.loading = false;
     });
     builder.addCase(loginWithNonce.fulfilled, (state, action) => {
-      console.log(action.payload.data.data);
       localStorage.setItem("authToken", action.payload.data.data.token);
       state.user = action.payload.data.data.details;
       state.loading = false;

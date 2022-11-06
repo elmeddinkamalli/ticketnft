@@ -68,8 +68,6 @@ TicketCtr.getTicket = async (req, res) => {
       )
     );
 
-    console.log(getTicketDetails);
-
     if (!getTicketDetails) {
       return res.status(400).json({
         message: req.t("NOT_EXISTS"),
@@ -126,7 +124,6 @@ TicketCtr.createTicket = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
     Utils.echoLog("error in nft ticket", err);
     return res.status(500).json({
       message: req.t("DB_ERROR"),
