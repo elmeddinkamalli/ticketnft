@@ -5,5 +5,7 @@ backend/node_modules
 backend/package-lock.json
 frontend/.env
 backend/.env
+frontend/dist
+frontend/npm-debug.log
 logs
 backend/uploads
