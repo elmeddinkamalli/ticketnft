@@ -62,6 +62,18 @@ const eventSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    paused: {
+      type: Boolean,
+      default: false,
+    },
+    saleStarts: {
+      type: Number,
+      default: 0
+    },
+    saleEnds: {
+      type: Number,
+      default: 0
+    },
   },
 
   {

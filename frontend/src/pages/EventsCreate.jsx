@@ -12,6 +12,8 @@ import { setLoading } from "../redux/features/userSlice";
 import { serializeError } from "eth-rpc-errors";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -28,6 +30,9 @@ class EventsCreate extends Component {
       ticketPreview: null,
       ticketDesignIsDefault: true,
       errors: [],
+      eventsStart: new Date(),
+      eventsEnd: null,
+      hasEnd: 0,
     };
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.uploadTicket = this.uploadTicket.bind(this);
@@ -72,6 +77,21 @@ class EventsCreate extends Component {
   }
 
   async handleSubmit() {
+    let timezoneOffset = new Date().getTimezoneOffset();
+    let saleStarts = this.state.eventsStart
+      ? Math.floor(
+          (new Date(this.state.eventsStart).getTime() - timezoneOffset) / 1000
+        )
+      : 0;
+    let saleEnds =
+      this.state.eventsEnd && this.state.hasEnd
+        ? Math.floor(
+            (new Date(this.state.eventsEnd).getTime() - timezoneOffset) / 1000
+          )
+        : 0;
+
+    console.log(saleStarts, saleEnds);
+    return;
     this.props.setLoading(true);
 
     if (!this.validateSubmit()) {
@@ -116,6 +136,8 @@ class EventsCreate extends Component {
       image: ipfsHashEventImage.path,
       ticketImage: ipfsHashTicketDesign.path,
       isDefaultDesign: this.state.ticketDesignIsDefault,
+      saleStarts: saleStarts,
+      saleEnds: saleEnds,
     });
 
     $axios
@@ -128,6 +150,8 @@ class EventsCreate extends Component {
         ticketDesignIsDefault: this.state.ticketDesignIsDefault,
         ticketImage: ipfsHashTicketDesign.path,
         eventURI: eventURI,
+        saleStarts: saleStarts,
+        saleEnds: saleEnds,
       })
       .then((res) => {
         const draftEventId = res.data.data._id;
@@ -136,6 +160,8 @@ class EventsCreate extends Component {
           draftEventId,
           this.state.maxTicketSupply,
           this.state.pricePerTicket,
+          saleStarts,
+          saleEnds,
           {
             value: 1000000000000000,
           },
@@ -247,6 +273,56 @@ class EventsCreate extends Component {
                     });
                   }}
                 />
+              </div>
+              <div className="my-3">
+                <label className="d-block" htmlFor="ticket-sale-starts">
+                  Sale starts:
+                </label>
+                <div>
+                  <DatePicker
+                    selected={this.state.eventsStart}
+                    onChange={(date) => {
+                      this.setState({
+                        eventsStart: date,
+                      });
+                    }}
+                    minDate={new Date()}
+                    showTimeInput
+                    dateFormat="dd:MM:y h:mm aa"
+                  />
+                </div>
+              </div>
+              <div className="my-3 sale-ends">
+                <label className="d-block" htmlFor="ticket-sale-ends">
+                  Sale ends:
+                </label>
+                <div className="d-flex">
+                  <select
+                    onChange={(e) => {
+                      this.setState({
+                        hasEnd: +e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="0" defaultValue>
+                      No limit
+                    </option>
+                    <option value="1">Date</option>
+                  </select>
+                  <DatePicker
+                    selected={this.state.eventsEnd}
+                    onChange={(date) => {
+                      this.setState({
+                        eventsEnd: date,
+                      });
+                    }}
+                    showTimeInput
+                    minDate={this.state.eventsStart}
+                    dateFormat="dd:MM:y h:mm aa"
+                    disabled={!this.state.hasEnd}
+                    placeholderText="... : ... : ..."
+                  />
+                </div>
               </div>
             </div>
             <div className="file-upload-preview w-100 my-3">

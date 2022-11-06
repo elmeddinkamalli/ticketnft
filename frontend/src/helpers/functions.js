@@ -1,4 +1,9 @@
 import Compressor from "compressorjs";
+import dayjs from "dayjs";
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone");
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function compressImage(image) {
   return new Promise((resolve, reject) => {
@@ -18,4 +23,10 @@ export async function compressImage(image) {
       reject(undefined);
     }
   });
+}
+
+export function convertUnixToDate(unix, format = "YYYY-MM-DD HH:mm:ss Z") {
+  var timezoneName = dayjs.tz.guess();
+  const dayjsLocal = dayjs.unix(unix);
+  return dayjs(dayjsLocal).tz(timezoneName).format(format);
 }

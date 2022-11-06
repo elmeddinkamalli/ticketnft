@@ -113,6 +113,8 @@ cronTasks.fetchDetailsFromIpfs = async (id) => {
     event.image = response.image.replace("https://ipfs.io/ipfs/", "");
     event.eventName = response.name;
     event.description = response.description;
+    event.saleStarts = response.saleStarts;
+    event.saleEnds = response.saleEnds;
 
     let eventDesign = await TicketDesignModel.findOne({
       eventId: event._id,

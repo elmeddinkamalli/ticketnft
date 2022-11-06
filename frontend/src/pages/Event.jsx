@@ -1,9 +1,20 @@
+// import dayjs from "dayjs";
 import { ethers } from "ethers";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import $axios from "../helpers/axios";
+import { convertUnixToDate } from "../helpers/functions";
 import { setLoading } from "../redux/features/userSlice";
+// var utc = require('dayjs/plugin/utc')
+// var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
+// dayjs.extend(utc)
+// dayjs.extend(timezone)
+
+// const dayjsLocal = dayjs.unix(1667724900);
+// console.log(dayjsLocal.tz('Asia/Baku').format('YYYY-MM-DD HH:mm:ss Z'));
+
+// const dd = convertUnixToDate(1667724900);
 
 class Event extends Component {
   constructor(props) {
@@ -13,6 +24,7 @@ class Event extends Component {
       id: window.location.pathname.split("/").pop(),
       event: null,
       ticketsSold: 0,
+      deadlinePercent: 0,
     };
   }
 
@@ -22,21 +34,34 @@ class Event extends Component {
       this.setState({
         event: res.data.data,
       });
-
-      // if (!res.data.data.isDraft && res.data.data.eventId) {
-      //   this.props.contract
-      //     .eventTicketSoldCount(res.data.data.eventId)
-      //     .then((res2) => {
-      //       this.setState({
-      //         ticketsSold: parseInt(res2, 16),
-      //       });
-      //     });
-      // }
       this.props.setLoading(false);
     });
   }
 
   render() {
+    if (
+      this.state.event &&
+      this.state.event.saleEnds &&
+      this.state.event.saleEnds != 0 &&
+      this.state.deadlinePercent == 0
+    ) {
+      setTimeout(() => {
+        let deadlinePercent =
+          (Math.floor(
+            (new Date().getTime() - new Date().getTimezoneOffset()) / 1000 -
+              this.state.event.saleStarts
+          ) /
+            (this.state.event.saleEnds - this.state.event.saleStarts)) *
+          100;
+        if (deadlinePercent > 100) {
+          deadlinePercent = 100;
+        }
+
+        this.setState({
+          deadlinePercent: deadlinePercent,
+        });
+      }, 1000);
+    }
     return (
       <div className="container event">
         <div className="d-flex flex-column align-items-center wrapper mx-auto mt-5">
@@ -48,6 +73,39 @@ class Event extends Component {
                   src={this.state.event.image}
                   alt="event image"
                 />
+                {this.state.event.saleEnds != 0 ? (
+                  <div className="border border-primary w-100 event-deadline">
+                    <div
+                      className={`bg-primary h-100 d-flex align-items-center justify-content-between deadline-progress ${
+                        this.state.deadlinePercent == 100 ? "ended" : ""
+                      }`}
+                      style={{
+                        width: this.state.deadlinePercent + "%",
+                      }}
+                    >
+                      <span>
+                        Sale starts:{" "}
+                        {convertUnixToDate(
+                          this.state.event.saleStarts,
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </span>
+                      <span>
+                        Sale{" "}
+                        {this.state.deadlinePercent == 100
+                          ? "ended at"
+                          : "ends"}
+                        :{" "}
+                        {convertUnixToDate(
+                          this.state.event.saleEnds,
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="col-4 right">
                 <div className="d-flex">

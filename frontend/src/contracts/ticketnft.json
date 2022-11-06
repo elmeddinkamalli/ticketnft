@@ -1,10 +1,5 @@
 [
   {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -74,42 +69,6 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "approve",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_canCreate",
-        "type": "bool"
-      }
-    ],
-    "name": "authorizeAddressToCreateEvent",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -121,72 +80,6 @@
     ],
     "name": "BeaconUpgraded",
     "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "burn",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_eventId",
-        "type": "uint256"
-      }
-    ],
-    "name": "burnEvent",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "eventURI",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_centralizedId",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxTicketSupply",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pricePerTicket",
-        "type": "uint256"
-      }
-    ],
-    "name": "createEvent",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
   },
   {
     "anonymous": false,
@@ -311,28 +204,21 @@
         "internalType": "string",
         "name": "centralizedId",
         "type": "string"
-      }
-    ],
-    "name": "createNewEvent",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "ticketId",
+        "name": "saleStarts",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "centralizedId",
+        "name": "saleEnds",
         "type": "uint256"
       }
     ],
-    "name": "creatingTicket",
+    "name": "createNewEvent",
     "type": "event"
   },
   {
@@ -349,13 +235,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -369,10 +248,178 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "centralizedId",
+        "type": "uint256"
       }
     ],
     "name": "mintingEventTicket",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
+      }
+    ],
+    "name": "pausingEvent",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_canCreate",
+        "type": "bool"
+      }
+    ],
+    "name": "authorizeAddressToCreateEvent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnEvent",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_eventId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
+      }
+    ],
+    "name": "changeEventPauseState",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "eventURI",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_centralizedId",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxTicketSupply",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pricePerTicket",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleStarts",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleEnds",
+        "type": "uint256"
+      }
+    ],
+    "name": "createEvent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -419,6 +466,11 @@
         "internalType": "string",
         "name": "_tokenURI",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_centralizedId",
+        "type": "uint256"
       }
     ],
     "name": "mintTicketForAddress",
@@ -579,6 +631,11 @@
   },
   {
     "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
     "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -666,6 +723,21 @@
         "internalType": "uint256",
         "name": "pricePerTicket",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleStarts",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleEnds",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -800,6 +872,21 @@
             "internalType": "uint256",
             "name": "pricePerTicket",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleStarts",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleEnds",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "paused",
+            "type": "bool"
           }
         ],
         "internalType": "struct TicketNFT.Event[]",
@@ -930,6 +1017,21 @@
         "internalType": "uint256",
         "name": "pricePerTicket",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleStarts",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saleEnds",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

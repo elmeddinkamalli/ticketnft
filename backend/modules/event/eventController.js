@@ -17,6 +17,8 @@ EventCtr.create = async (req, res) => {
       ticketImage,
       eventURI,
       eventDescription,
+      saleStarts,
+      saleEnds
     } = req.body;
 
     const chainId = req.headers.chainid ?? null;
@@ -30,6 +32,8 @@ EventCtr.create = async (req, res) => {
       eventURI: eventURI,
       description: eventDescription,
       chainId: chainId,
+      saleStarts: saleStarts,
+      saleEnds: saleEnds
     });
 
     const saveEvent = await createNewEvent.save();

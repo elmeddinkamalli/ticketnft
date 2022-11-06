@@ -23,3 +23,35 @@
                     grid-template-columns: auto
                 @media screen and (min-width: $medium)
                     grid-template-columns: repeat(2, 1fr)
+
+    .event-deadline
+        position: relative
+        padding: 2px
+        height: 40px
+        .deadline-progress
+            transition: width 1s
+            background: linear-gradient(-45deg, #ffa434, #902e54, #a9520f, #c83936)
+            background-size: 400% 400%
+            animation: gradient 5s ease infinite
+
+            &.ended
+                background: #0d6efd !important
+                animation: none
+
+            span
+                position: absolute
+                font-weight: 500
+                
+                &:first-child
+                    left: 10px
+
+                &:last-child
+                    right: 10px
+        
+        @keyframes gradient 
+            0% 
+                background-position: 0% 50%
+            50% 
+                background-position: 100% 50%
+            100% 
+                background-position: 0% 50%
