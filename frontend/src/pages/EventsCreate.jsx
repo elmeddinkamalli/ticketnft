@@ -77,21 +77,6 @@ class EventsCreate extends Component {
   }
 
   async handleSubmit() {
-    let timezoneOffset = new Date().getTimezoneOffset();
-    let saleStarts = this.state.eventsStart
-      ? Math.floor(
-          (new Date(this.state.eventsStart).getTime() - timezoneOffset) / 1000
-        )
-      : 0;
-    let saleEnds =
-      this.state.eventsEnd && this.state.hasEnd
-        ? Math.floor(
-            (new Date(this.state.eventsEnd).getTime() - timezoneOffset) / 1000
-          )
-        : 0;
-
-    console.log(saleStarts, saleEnds);
-    return;
     this.props.setLoading(true);
 
     if (!this.validateSubmit()) {
@@ -129,6 +114,19 @@ class EventsCreate extends Component {
         },
       });
     }
+
+    let timezoneOffset = new Date().getTimezoneOffset();
+    let saleStarts = this.state.eventsStart
+      ? Math.floor(
+          (new Date(this.state.eventsStart).getTime() - timezoneOffset) / 1000
+        )
+      : 0;
+    let saleEnds =
+      this.state.eventsEnd && this.state.hasEnd
+        ? Math.floor(
+            (new Date(this.state.eventsEnd).getTime() - timezoneOffset) / 1000
+          )
+        : 0;
 
     const eventURI = await ipfs.pinJson({
       name: this.state.eventName,
@@ -266,11 +264,18 @@ class EventsCreate extends Component {
                   id="ticket-price"
                   placeholder="Enter value"
                   onChange={(e) => {
-                    this.setState({
-                      pricePerTicket: parseInt(
-                        ethers.utils.parseUnits(e.target.value, "ether")
-                      ),
-                    });
+                    try {
+                      this.setState({
+                        pricePerTicket: parseInt(
+                          ethers.utils.parseUnits(e.target.value, "ether")
+                        ),
+                        errors: []
+                      },);
+                    } catch (error) {
+                      this.setState({
+                        errors: ["pricePerTicket"]
+                      })
+                    }
                   }}
                 />
               </div>
