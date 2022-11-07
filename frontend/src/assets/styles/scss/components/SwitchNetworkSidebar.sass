@@ -1,0 +1,56 @@
+.siwtch-network-sidebar
+    .siwtch-network-sidebar-wrapper
+        width: 400px
+        height: 100%
+        position: fixed
+        right: -400px
+        top: 0
+        bottom: 0
+        z-index: 300
+        background: #001232
+        transition: right .3s
+        border-left: 1px solid #fff
+    
+    &.active
+        .siwtch-network-sidebar-wrapper
+            right: 0
+
+        .grayed-bg
+            display: block !important
+    
+    .toggler
+        position: absolute
+        right: 100%
+        top: 50%
+        transform: translateY(-50%)
+        cursor: pointer
+
+    .available-chains
+        width: 300px
+        ul
+            list-style-type: none
+            li
+                border-radius: 10px
+                &:hover
+                    background: #081f46
+                &.active
+                    background: linear-gradient(-45deg, #ffa434, #902e54, #a9520f, #c83936)
+                    background-size: 400% 400%
+                    animation: gradient 5s ease infinite
+
+                img
+                    width: 35px
+                    height: 35px
+
+    .close-btn
+        position: absolute
+        top: 40px
+        left: 50px
+
+    @keyframes gradient 
+        0% 
+            background-position: 0% 50%
+        50% 
+            background-position: 100% 50%
+        100% 
+            background-position: 0% 50%

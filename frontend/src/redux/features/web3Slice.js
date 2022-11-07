@@ -50,8 +50,13 @@ export const web3Slice = createSlice({
     web3: null,
     web3ForQuery: null,
     chainId: null,
+    isSwitchNetworkSidebarActive: false,
   },
-  reducers: {},
+  reducers: {
+    toggleSwitchSidebar: (state) => {
+      state.isSwitchNetworkSidebarActive = !state.isSwitchNetworkSidebarActive;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getChainId.fulfilled, (state, action) => {
       state.chainId = action.payload;
@@ -66,6 +71,8 @@ export const web3Slice = createSlice({
   },
 });
 
-export const { isValidChainId } = web3Slice.actions;
+export const { isValidChainId, toggleSwitchSidebar } = web3Slice.actions;
+export const isSwitchNetworkSidebarActive = (state) =>
+  state.web3.isSwitchNetworkSidebarActive;
 
 export default web3Slice.reducer;

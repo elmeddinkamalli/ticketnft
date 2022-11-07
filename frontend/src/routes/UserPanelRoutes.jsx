@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import About from "../pages/About";
 import Dashboard from "../pages/Dashboard";
 import EditProdile from "../pages/EditProdile";
 import Event from "../pages/Event";
@@ -22,6 +23,7 @@ export default class UserPanelRoutes extends Component {
           <Route path={"/tickets/:id"} element={<Ticket />} />
           <Route path={"/profile/edit"} element={<EditProdile />} />
           <Route path={"/profile/:id"} element={<Profile />} />
+          <Route path={"/about"} element={<About />} />
         </Routes>
       </div>
     );

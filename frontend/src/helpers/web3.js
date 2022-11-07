@@ -49,7 +49,22 @@ const isValidChainId = (chainId) => {
   if (chainId) {
     compareWith = chainId;
   }
-  return [+process.env.REACT_APP_ETH_CHAIN_ID].includes(+compareWith);
+  return [
+    +process.env.REACT_APP_ETH_CHAIN_ID,
+    +process.env.REACT_APP_BNB_CHAIN_ID,
+    +process.env.REACT_APP_MATIC_CHAIN_ID,
+    +process.env.REACT_APP_FTM_CHAIN_ID,
+  ].includes(+compareWith);
 };
 
-export { enableMetamask, getCurrentChainId, currentChainId, isValidChainId };
+const isCurrentChain = (chainId) => {
+  return currentChainId == chainId;
+};
+
+export {
+  enableMetamask,
+  getCurrentChainId,
+  currentChainId,
+  isValidChainId,
+  isCurrentChain,
+};
