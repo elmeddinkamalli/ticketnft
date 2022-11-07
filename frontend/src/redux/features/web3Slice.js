@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createSelectorHook, useDispatch, useSelector } from "react-redux";
 import $axios from "../../helpers/axios";
-import { enableMetamask } from "../../helpers/web3";
+import { enableMetamask, getCurrentChainContractAddress } from "../../helpers/web3";
 import { ethers } from "ethers";
 import ticketnftAbi from "../../contracts/ticketnft.json";
 import userSlice from "./userSlice";
@@ -35,7 +35,7 @@ export const setWeb3 = createAsyncThunk(
       }
       web3Object.web3 = new ethers.providers.Web3Provider(window.ethereum);
       web3Object.web3ForQuery = new ethers.Contract(
-        process.env.REACT_APP_ETH_CONTRACT_ADDRESS,
+        getCurrentChainContractAddress(),
         ticketnftAbi,
         web3Object.web3.getSigner()
       );

@@ -14,6 +14,12 @@ import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {
+  currentChainId,
+  getChainDetails,
+  isValidChainId,
+} from "../helpers/web3";
+import { toggleSwitchSidebar } from "../redux/features/web3Slice";
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
 class EventsCreate extends Component {
@@ -157,7 +163,7 @@ class EventsCreate extends Component {
           eventURI,
           draftEventId,
           this.state.maxTicketSupply,
-          this.state.pricePerTicket,
+          String(this.state.pricePerTicket),
           saleStarts,
           saleEnds,
           {
@@ -257,7 +263,13 @@ class EventsCreate extends Component {
               </div>
               <div className="my-3">
                 <label className="d-block" htmlFor="ticket-price">
-                  Ticket price (ETH):
+                  Ticket price{" "}
+                  {isValidChainId()
+                    ? `(${
+                        getChainDetails(currentChainId).nativeCurrency.symbol
+                      })`
+                    : ""}
+                  :
                 </label>
                 <input
                   className={`w-100 ${
@@ -457,12 +469,21 @@ class EventsCreate extends Component {
               )}
             </div>
             <div className="mt-4 w-100">
-              <button
-                className="w-100 btn btn-outline-primary"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
+              {isValidChainId() ? (
+                <button
+                  className="w-100 btn btn-outline-primary"
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
+              ) : (
+                <button
+                  className="w-100 btn btn-outline-warning"
+                  onClick={this.props.toggleSwitchSidebar}
+                >
+                  Use supported networks
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -482,6 +503,7 @@ const mapStateToProps = (state) => {
 const mapDipatchToProps = (dispatch) => {
   return {
     setLoading: (payload = true) => dispatch(setLoading(payload)),
+    toggleSwitchSidebar: () => dispatch(toggleSwitchSidebar()),
   };
 };
 

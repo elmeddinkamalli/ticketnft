@@ -120,7 +120,7 @@ class Ticket extends Component {
                   <span>
                     Ticket price:{" "}
                     {ethers.utils.formatEther(
-                      this.state.ticket.eventId.pricePerTicket,
+                      String(this.state.ticket.eventId.pricePerTicket),
                       "wei"
                     )}{" "}
                     {chainDetails.nativeCurrency.symbol}

@@ -13,10 +13,16 @@ const TicketDesignModel = require("../modules/ticketDesign/ticketDesignModel");
 
 const addresses = {
   [process.env.ETH_CHAIN_ID]: process.env.ETH_CONTRACT_ADDRESS,
+  [process.env.BNB_CHAIN_ID]: process.env.BNB_CONTRACT_ADDRESS,
+  [process.env.MATIC_CHAIN_ID]: process.env.MATIC_CONTRACT_ADDRESS,
+  [process.env.FTM_CHAIN_ID]: process.env.FTM_CONTRACT_ADDRESS,
 };
 
 const _web3 = {
   [process.env.ETH_CHAIN_ID]: new Web3(process.env.ETH_RPC),
+  [process.env.BNB_CHAIN_ID]: new Web3(process.env.BNB_RPC),
+  [process.env.MATIC_CHAIN_ID]: new Web3(process.env.MATIC_RPC),
+  [process.env.FTM_CHAIN_ID]: new Web3(process.env.FTM_RPC),
 };
 
 const cronTasks = {};

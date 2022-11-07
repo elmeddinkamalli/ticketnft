@@ -132,7 +132,7 @@ class TicketDesign extends Component {
     const jsonUrl = await ipfs.pinJson(openseaStandards);
     this.props.contract
       .mintTicket(this.state.ticket.eventId.eventId, jsonUrl, yourId, {
-        value: this.state.ticket.eventId.pricePerTicket,
+        value: String(this.state.ticket.eventId.pricePerTicket),
       })
       .then(async (res2) => {
         await $axios.post("/tickets/create", {
@@ -251,7 +251,7 @@ class TicketDesign extends Component {
                   <span>
                     Ticket price:{" "}
                     {ethers.utils.formatEther(
-                      this.state.ticket.eventId.pricePerTicket,
+                      String(this.state.ticket.eventId.pricePerTicket),
                       "wei"
                     )}{" "}
                     {chainDetails?.nativeCurrency.symbol}
