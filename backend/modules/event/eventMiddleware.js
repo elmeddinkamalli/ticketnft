@@ -4,9 +4,11 @@ const UserModel = require("../user/userModel");
 const EventMiddleware = {};
 
 EventMiddleware.checkUserCanCreateEvent = async (req, res, next) => {
-  if (req.userData && req.userData.canCreateEvent) {
-    return next();
-  }
+  return next();
+
+  // if (req.userData && req.userData.canCreateEvent) {
+  //   return next();
+  // }
   return res.status(400).json({
     status: false,
     message: req.t("CANNOT_CREATE_EVENT"),
