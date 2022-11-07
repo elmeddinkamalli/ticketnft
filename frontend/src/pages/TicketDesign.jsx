@@ -8,6 +8,8 @@ import ipfs from "../helpers/ipfs";
 import { connectToWallet, setLoading } from "../redux/features/userSlice";
 const yourId = new Date().getTime();
 import { serializeError } from "eth-rpc-errors";
+import { getChainDetails, isCurrentChain } from "../helpers/web3";
+import { toggleSwitchSidebar } from "../redux/features/web3Slice";
 
 class TicketDesign extends Component {
   constructor(props) {
@@ -158,30 +160,34 @@ class TicketDesign extends Component {
   }
 
   render() {
-    if (
-      this.state.ticket &&
-      this.state.ticket.eventId &&
-      this.state.ticket.eventId.saleEnds &&
-      this.state.ticket.eventId.saleEnds != 0 &&
-      this.state.deadlinePercent == 0
-    ) {
-      setTimeout(() => {
-        let deadlinePercent =
-          (Math.floor(
-            (new Date().getTime() - new Date().getTimezoneOffset()) / 1000 -
-              this.state.ticket.eventId.saleStarts
-          ) /
-            (this.state.ticket.eventId.saleEnds -
-              this.state.ticket.eventId.saleStarts)) *
-          100;
-        if (deadlinePercent > 100) {
-          deadlinePercent = 100;
-        }
+    let chainDetails;
 
-        this.setState({
-          deadlinePercent: deadlinePercent,
-        });
-      }, 100);
+    if (this.state.ticket && this.state.ticket.eventId) {
+      chainDetails = getChainDetails(this.state.ticket.eventId.chainId);
+
+      if (
+        this.state.ticket.eventId.saleEnds &&
+        this.state.ticket.eventId.saleEnds != 0 &&
+        this.state.deadlinePercent == 0
+      ) {
+        setTimeout(() => {
+          let deadlinePercent =
+            (Math.floor(
+              (new Date().getTime() - new Date().getTimezoneOffset()) / 1000 -
+                this.state.ticket.eventId.saleStarts
+            ) /
+              (this.state.ticket.eventId.saleEnds -
+                this.state.ticket.eventId.saleStarts)) *
+            100;
+          if (deadlinePercent > 100) {
+            deadlinePercent = 100;
+          }
+
+          this.setState({
+            deadlinePercent: deadlinePercent,
+          });
+        }, 100);
+      }
     }
 
     return (
@@ -230,6 +236,9 @@ class TicketDesign extends Component {
                 <hr />
                 <p>{this.state.ticket.eventId.description}</p>
                 <div>
+                  <span>Network: {chainDetails?.name}</span>
+                </div>
+                <div>
                   <span>
                     Ticket count for sale:{" "}
                     {this.state.ticket.eventId.maxTicketSupply}
@@ -245,7 +254,7 @@ class TicketDesign extends Component {
                       this.state.ticket.eventId.pricePerTicket,
                       "wei"
                     )}{" "}
-                    ETH
+                    {chainDetails?.nativeCurrency.symbol}
                   </span>
                 </div>
                 <hr />
@@ -296,12 +305,21 @@ class TicketDesign extends Component {
                             ></span>
                             <span className="sr-only ml-2">In progress...</span>
                           </button>
-                        ) : (
+                        ) : isCurrentChain(
+                            this.state.ticket.eventId.chainId
+                          ) ? (
                           <button
                             className="btn btn-outline-info"
                             onClick={this.mintTicket}
                           >
                             Mint your ticket now
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-outline-warning"
+                            onClick={this.props.toggleSwitchSidebar}
+                          >
+                            Available on {chainDetails?.name}
                           </button>
                         )
                       ) : (
@@ -348,6 +366,7 @@ const mapDipatchToProps = (dispatch) => {
         })
       ),
     setLoading: (payload = true) => dispatch(setLoading(payload)),
+    toggleSwitchSidebar: () => dispatch(toggleSwitchSidebar()),
   };
 };
 

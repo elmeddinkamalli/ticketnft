@@ -1,3 +1,5 @@
+import chains from "../assets/data/chains.json";
+
 const onChainChange = () => {
   window.ethereum.on("chainChanged", (chainId) => {
     localStorage.setItem("chainId", parseInt(chainId, 16));
@@ -61,10 +63,17 @@ const isCurrentChain = (chainId) => {
   return currentChainId == chainId;
 };
 
+const getChainDetails = (chainId) => {
+  return chains.find((chain) => {
+    return +chain.chainId == +chainId;
+  });
+};
+
 export {
   enableMetamask,
   getCurrentChainId,
   currentChainId,
   isValidChainId,
   isCurrentChain,
+  getChainDetails,
 };

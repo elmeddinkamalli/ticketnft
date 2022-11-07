@@ -5,16 +5,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import $axios from "../helpers/axios";
 import { convertUnixToDate } from "../helpers/functions";
+import { getChainDetails } from "../helpers/web3";
 import { setLoading } from "../redux/features/userSlice";
-// var utc = require('dayjs/plugin/utc')
-// var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
-// dayjs.extend(utc)
-// dayjs.extend(timezone)
-
-// const dayjsLocal = dayjs.unix(1667724900);
-// console.log(dayjsLocal.tz('Asia/Baku').format('YYYY-MM-DD HH:mm:ss Z'));
-
-// const dd = convertUnixToDate(1667724900);
 
 class Event extends Component {
   constructor(props) {
@@ -39,28 +31,33 @@ class Event extends Component {
   }
 
   render() {
-    if (
-      this.state.event &&
-      this.state.event.saleEnds &&
-      this.state.event.saleEnds != 0 &&
-      this.state.deadlinePercent == 0
-    ) {
-      setTimeout(() => {
-        let deadlinePercent =
-          (Math.floor(
-            (new Date().getTime() - new Date().getTimezoneOffset()) / 1000 -
-              this.state.event.saleStarts
-          ) /
-            (this.state.event.saleEnds - this.state.event.saleStarts)) *
-          100;
-        if (deadlinePercent > 100) {
-          deadlinePercent = 100;
-        }
+    let chainDetails;
 
-        this.setState({
-          deadlinePercent: deadlinePercent,
-        });
-      }, 1000);
+    if (this.state.event) {
+      chainDetails = getChainDetails(this.state.event.chainId);
+
+      if (
+        this.state.event.saleEnds &&
+        this.state.event.saleEnds != 0 &&
+        this.state.deadlinePercent == 0
+      ) {
+        setTimeout(() => {
+          let deadlinePercent =
+            (Math.floor(
+              (new Date().getTime() - new Date().getTimezoneOffset()) / 1000 -
+                this.state.event.saleStarts
+            ) /
+              (this.state.event.saleEnds - this.state.event.saleStarts)) *
+            100;
+          if (deadlinePercent > 100) {
+            deadlinePercent = 100;
+          }
+
+          this.setState({
+            deadlinePercent: deadlinePercent,
+          });
+        }, 1000);
+      }
     }
     return (
       <div className="container event">
@@ -136,6 +133,9 @@ class Event extends Component {
                 <div className="mt-2">{this.state.event.description}</div>
                 <hr />
                 <div>
+                  <span>Network: {chainDetails?.name}</span>
+                </div>
+                <div>
                   <span>
                     Ticket count for sale: {this.state.event.maxTicketSupply}
                   </span>
@@ -150,7 +150,7 @@ class Event extends Component {
                       this.state.event.pricePerTicket,
                       "wei"
                     )}{" "}
-                    ETH
+                    {chainDetails?.nativeCurrency.symbol}
                   </span>
                 </div>
                 <hr />

@@ -7,6 +7,7 @@ import $axios from "../helpers/axios";
 import { connectToWallet, setLoading } from "../redux/features/userSlice";
 import { serializeError } from "eth-rpc-errors";
 import PermissionPopup from "../components/page-contents/PermissionPopup";
+import { getChainDetails, isCurrentChain } from "../helpers/web3";
 
 class Ticket extends Component {
   constructor(props) {
@@ -59,6 +60,10 @@ class Ticket extends Component {
   }
 
   render() {
+    let chainDetails;
+    if (this.state.ticket && this.state.ticket.eventId) {
+      chainDetails = getChainDetails(this.state.ticket.eventId.chainId);
+    }
     return (
       <div className="container ticket">
         <div className="d-flex flex-column align-items-center wrapper mx-auto mt-5">
@@ -100,6 +105,9 @@ class Ticket extends Component {
                 <hr />
                 <p>{this.state.ticket.eventId.description}</p>
                 <div>
+                  <span>Network: {chainDetails?.name}</span>
+                </div>
+                <div>
                   <span>
                     Ticket count for sale:{" "}
                     {this.state.ticket.eventId.maxTicketSupply}
@@ -115,14 +123,15 @@ class Ticket extends Component {
                       this.state.ticket.eventId.pricePerTicket,
                       "wei"
                     )}{" "}
-                    ETH
+                    {chainDetails.nativeCurrency.symbol}
                   </span>
                 </div>
                 <hr />
                 <div>
                   {this.props.connectedAddress &&
                   this.props.user &&
-                  this.state.ticket.ownerId._id == this.props.user._id ? (
+                  this.state.ticket.ownerId._id == this.props.user._id &&
+                  isCurrentChain(this.state.ticket.eventId.chainId) ? (
                     <button
                       className="btn btn-danger"
                       onClick={this.togglePermissionPopup}
