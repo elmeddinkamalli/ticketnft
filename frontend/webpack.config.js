@@ -67,7 +67,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
-      title: "Empty project",
+      title: "TicketNFT | Book tickets on Blokchain",
       template: path.resolve(__dirname, "./src/index.html"),
     }),
     new MiniCssExtractPlugin(),
