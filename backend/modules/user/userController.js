@@ -9,11 +9,16 @@ const EventModel = require("../event/eventModel");
 let formidable = require("formidable");
 var path = require("path");
 let fs = require("fs");
+const { sendSlack } = require("../../services/slack.service");
 
 const UserCtr = {};
 
 // login initally
 UserCtr.login = async (req, res) => {
+  try {
+    sendSlack("New login detected");
+  } catch (error) {}
+
   try {
     const { nonce, signature } = req.body;
     const web3 = new Web3(
