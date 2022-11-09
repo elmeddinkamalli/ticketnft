@@ -69,14 +69,14 @@ class Ticket extends Component {
         <div className="d-flex flex-column align-items-center wrapper mx-auto mt-5">
           {this.state.ticket ? (
             <div className="row w-100 ticket-details">
-              <div className="col-4 left">
+              <div className="col-sm-4 col-12 mb-sm-0 mb-5 left">
                 <img
                   src={this.state.ticket.image}
                   className="w-100 h-100 ticket-image"
                   id="Canvatext"
                 />
               </div>
-              <div className="col-8 right">
+              <div className="col-sm-8 col-12 right">
                 <div className="d-flex">
                   <h5>{this.state.ticket.eventId.eventName}</h5>
                   {this.state.ticket.eventId.isDraft ? (

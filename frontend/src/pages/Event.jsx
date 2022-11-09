@@ -64,7 +64,7 @@ class Event extends Component {
         <div className="d-flex flex-column align-items-center wrapper mx-auto mt-5">
           {this.state.event ? (
             <div className="row w-100 event-details">
-              <div className="col-8 left">
+              <div className="col-12 col-sm-8 left mb-5 mb-sm-0">
                 <img
                   className="w-100 event-image"
                   src={this.state.event.image}
@@ -104,7 +104,7 @@ class Event extends Component {
                   ""
                 )}
               </div>
-              <div className="col-4 right">
+              <div className="col-12 col-sm-4 right">
                 <div className="d-flex">
                   <h5>{this.state.event.eventName}</h5>
                   {this.state.event.isDraft ? (
