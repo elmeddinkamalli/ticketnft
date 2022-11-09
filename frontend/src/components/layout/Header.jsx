@@ -6,6 +6,7 @@ import { currentChainId, isValidChainId } from "../../helpers/web3";
 import { connectToWallet, logout } from "../../redux/features/userSlice";
 import LoginModal from "../page-contents/LoginModal";
 import SwitchNetwork from "../page-contents/SwitchNetwork";
+import BarsIco from "../../assets/static/bars.svg";
 
 class Header extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class Header extends Component {
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,24 @@ class Header extends Component {
         });
       }
     });
+
+    document
+      .getElementById("menu-toggle")
+      .addEventListener("change", this.toggleMobileMenu);
+  }
+
+  toggleMobileMenu() {
+    var toggle = document.getElementById("menu-toggle");
+    if (toggle.checked) {
+      document.querySelector(".header_mobile").classList.add("open");
+    } else {
+      document.querySelector(".header_mobile").classList.remove("open");
+    }
+  }
+
+  closeMobileMenu() {
+    document.querySelector(".header_mobile").classList.remove("open");
+    document.getElementById("menu-toggle").checked = false;
   }
 
   toggleLoginModal() {
@@ -93,30 +113,96 @@ class Header extends Component {
   }
 
   headerLinks() {
-    if (this.props.user) {
+    return (
+      <>
+        <NavLink
+          onClick={this.closeMobileMenu}
+          className="px-3 text-white text-decoration-none nav-link"
+          to={"/"}
+          end
+        >
+          Home
+        </NavLink>
+        <NavLink
+          onClick={this.closeMobileMenu}
+          className="px-3 text-white nowrap text-decoration-none nav-link"
+          to={"/events"}
+          end
+        >
+          Events
+        </NavLink>
+        <NavLink
+          onClick={this.closeMobileMenu}
+          className="px-3 text-white nowrap text-decoration-none nav-link"
+          to={"/about"}
+        >
+          About
+        </NavLink>
+      </>
+    );
+  }
+
+  connectButtonsMobile() {
+    if (this.props.connectedAddress && this.props.user) {
       return (
         <>
-          <NavLink
-            className="px-3 text-white text-decoration-none nav-link"
-            to={"/"}
-            end
-          >
-            Home
-          </NavLink>
-          <NavLink
+          <Link
+            onClick={this.closeMobileMenu}
             className="px-3 text-white nowrap text-decoration-none nav-link"
-            to={"/events"}
-            end
+            to={`/profile/${this.props.user._id}`}
           >
-            Events
-          </NavLink>
-          <NavLink
+            Profile
+          </Link>
+          <Link
+            onClick={this.closeMobileMenu}
             className="px-3 text-white nowrap text-decoration-none nav-link"
-            to={"/about"}
+            to="/events/create"
           >
-            About
-          </NavLink>
+            Create event
+          </Link>
+          <hr />
+          <Link
+            className="px-3 text-white nowrap text-decoration-none nav-link"
+            onClick={() => {
+              this.props.logout();
+              this.closeMobileMenu;
+            }}
+          >
+            <button className="btn text-danger nowrap p-0 m-0">Log out</button>
+          </Link>
         </>
+      );
+    } else if (this.props.connectedAddress == null && this.props.user) {
+      return (
+        <>
+          <Link
+            className="px-3 text-white nowrap text-decoration-none nav-link"
+            variant="outline-info nowrap"
+            onClick={() => this.props.connectToWallet(false)}
+          >
+            Connect wallet
+          </Link>
+        </>
+      );
+    } else if (this.props.user == null && this.props.connectedAddress) {
+      return (
+        <Link
+          className="px-3 text-white nowrap text-decoration-none nav-link"
+          variant="outline-info"
+          onClick={() => this.props.connectToWallet(true)}
+        >
+          Login
+        </Link>
+      );
+    } else {
+      return (
+        <Link
+          className="px-3 text-white nowrap text-decoration-none nav-link"
+          variant="outline-info nowrap"
+          onClick={this.toggleLoginModal}
+        >
+          Connect and login
+        </Link>
       );
     }
   }
@@ -125,21 +211,44 @@ class Header extends Component {
     return (
       <>
         <header
-          className={`header d-flex justify-content-between align-items-center p-3 border-bottom text-white px-5 ${this.state.bg}`}
+          className={`header p-3 border-bottom text-white px-5 ${this.state.bg}`}
         >
-          <Link
-            to={"/"}
-            className="header-logo d-flex align-items-center container p-0 m-0 text-decoration-none text-white"
-          >
-            <img src="static/logo-header-2.png" alt="logo" />
-            <span>TicketNFT</span>
-          </Link>
-          <div className="align-items-center d-flex">
-            {!isValidChainId() && <SwitchNetwork />}
-            <ul className="d-flex flex-row navbar-nav mr-5">
+          <div className="header_web d-flex justify-content-between align-items-center">
+            <Link
+              to={"/"}
+              className="header-logo d-flex align-items-center container p-0 m-0 text-decoration-none text-white"
+              onClick={this.closeMobileMenu}
+            >
+              <img src="static/logo-header-2.png" alt="logo" />
+              <span>TicketNFT</span>
+            </Link>
+            <div className="align-items-center d-flex">
+              {!isValidChainId() && <SwitchNetwork />}
+              <div className="cursor-pointer ml-3 d-sm-none d-block">
+                <input id="menu-toggle" type="checkbox" className="d-none" />
+                <label
+                  className="header_mobile-menu_button_container"
+                  htmlFor="menu-toggle"
+                >
+                  <div className="header_mobile-menu_button"></div>
+                </label>
+              </div>
+              <div className="d-none d-sm-flex align-items-center">
+                <ul className="d-flex flex-row navbar-nav mr-5">
+                  {this.headerLinks()}
+                </ul>
+                {this.connectButtons()}
+              </div>
+            </div>
+          </div>
+          <div className="header_mobile d-sm-none d-block">
+            <ul className="d-flex flex-column navbar-nav mr-5">
               {this.headerLinks()}
             </ul>
-            {this.connectButtons()}
+            <hr />
+            <ul className="d-flex flex-column navbar-nav">
+              {this.connectButtonsMobile()}
+            </ul>
           </div>
         </header>
         <LoginModal

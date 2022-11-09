@@ -91,5 +91,5 @@ export {
   isValidChainId,
   isCurrentChain,
   getChainDetails,
-  getCurrentChainContractAddress
+  getCurrentChainContractAddress,
 };

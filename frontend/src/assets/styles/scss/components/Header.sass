@@ -7,6 +7,14 @@
     left: 0
     z-index: 5
     transition: background .3s
+
+    .header_web
+        position: relative
+        z-index: 2
+
+    .header_mobile
+        z-index: 1
+
     &.dark
         background: #001232
 
@@ -29,3 +37,58 @@
                 left: 0
                 bottom: -16px
                 background: #fff
+
+    .header_mobile-menu_button_container
+        height: 30px
+        width: 30px
+        cursor: pointer
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+
+        .header_mobile-menu_button,
+        .header_mobile-menu_button::before,
+        .header_mobile-menu_button::after
+            display: block
+            background-color: #fff
+            position: absolute
+            height: 4px
+            width: 30px
+            transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1)
+            border-radius: 2px
+
+        .header_mobile-menu_button::before
+            content: ''
+            margin-top: -8px
+
+        .header_mobile-menu_button::after
+            content: ''
+            margin-top: 8px
+
+    #menu-toggle
+        &:checked
+            & + .header_mobile-menu_button_container
+                .header_mobile-menu_button
+                    background: rgba(255, 255, 255, 0)
+                    &::before
+                        margin-top: 0px
+                        transform: rotate(405deg)
+                    &::after
+                        margin-top: 0px
+                        transform: rotate(-405deg)
+
+    .header_mobile
+        background: #000
+        position: fixed
+        top: -100%
+        width: 100%
+        left: 0
+        transition: top .3s
+
+        &.open
+            top: 77px
+
+
+        .nav-link.active::after
+            content: none
