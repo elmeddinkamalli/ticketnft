@@ -29,7 +29,7 @@ class Profile extends Component {
     return (
       <div className="container profile">
         {this.state.profile ? (
-          <div className="px-5">
+          <div className="px-2 px-sm-5">
             <div className="d-flex flex-column justify-content-center align-items-center profile-wrapper p-5">
               <img
                 className="avatar"
@@ -58,7 +58,7 @@ class Profile extends Component {
               )}
             </div>
             <div className="row mt-5 p-0">
-              <div className="col-12 col-sm-2 mb-4 mb-sm-0">
+              <div className="col-12 col-md-2 mb-4 mb-md-0">
                 <ul className="list-group tabs">
                   <li
                     className={`list-group-item ${
@@ -86,7 +86,7 @@ class Profile extends Component {
                   </li>
                 </ul>
               </div>
-              <div className="col-12 col-sm-10">
+              <div className="col-12 col-md-10">
                 <div className="grid-container">
                   {this.state.activeTab == "events"
                     ? this.state.profile.events.map((event, i) => {

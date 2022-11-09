@@ -31,33 +31,35 @@
         @media screen and (min-width: $small)
             grid-template-columns: auto
         @media screen and (min-width: $medium)
+            grid-template-columns: repeat(2, 1fr)
+        @media screen and (min-width: $large)
             grid-template-columns: repeat(3, 1fr)
 
-            .event-item
-                cursor: pointer
-                position: relative
-                overflow: hidden
+        .event-item
+            cursor: pointer
+            position: relative
+            overflow: hidden
 
+            img
+                transition: all .3s
+                object-fit: cover
+
+            &:hover
                 img
-                    transition: all .3s
-                    object-fit: cover
-
-                &:hover
-                    img
-                        transform: scale(1.5) rotate(20deg)
-                    .event-item-info-section
-                        bottom: 0
-                        width: 100%
-                        left: 0
-
+                    transform: scale(1.5) rotate(20deg)
                 .event-item-info-section
-                    position: absolute
-                    transition: all .3s
-                    bottom: -100%
-                    background: rgb(0 0 0 / 43%)
-                    left: 16px
-                    right: 0
-                    width: calc(100% - 32px)
-                    padding: 20px
+                    bottom: 0
+                    width: 100%
+                    left: 0
+
+            .event-item-info-section
+                position: absolute
+                transition: all .3s
+                bottom: -100%
+                background: rgb(0 0 0 / 43%)
+                left: 16px
+                right: 0
+                width: calc(100% - 32px)
+                padding: 20px
 
         
