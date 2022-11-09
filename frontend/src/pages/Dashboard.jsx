@@ -35,7 +35,7 @@ class Dashboard extends Component {
           style={{ backgroundImage: "url(/static/dashboard-banner2.jpeg)" }}
         ></div>
         <div className="dashboard-head">
-          <div className="slogan text-center">
+          <div className="slogan text-center p-sm-0 p-5">
             <h1>BOOK YOUR TICKETS FROM BLOKCHAIN</h1>
             <h5>Create events, buy and sell tickets as NFT</h5>
           </div>
