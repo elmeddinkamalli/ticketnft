@@ -24,7 +24,7 @@ module.exports = {
   entry: path.resolve(__dirname, "./src/index.js"),
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.bundle.js",
+    filename: "main.bundle.js?v=" + Math.random(1, 100)
   },
   module: {
     rules: [
