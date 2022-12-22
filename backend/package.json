@@ -34,7 +34,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
-    "mongoose": "^5.10.8",
+    "mongoose": "^5.13.15",
     "multer": "*",
     "multiparty": "^4.2.3",
     "node-2fa": "^2.0.3",
