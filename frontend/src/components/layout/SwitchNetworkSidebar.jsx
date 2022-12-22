@@ -79,6 +79,19 @@ class SwitchNetworkSidebar extends Component {
               </li>
               <li
                 className={`my-2 p-1 cursor-pointer ${
+                  isCurrentChain(process.env.REACT_APP_BNB_MAINNET_CHAIN_ID)
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  this.switchTo(process.env.REACT_APP_BNB_MAINNET_CHAIN_ID)
+                }
+              >
+                <img className="mr-3" src="/static/binance.png" alt="binance" />
+                <span>Binance Mainnet</span>
+              </li>
+              <li
+                className={`my-2 p-1 cursor-pointer ${
                   isCurrentChain(process.env.REACT_APP_BNB_CHAIN_ID)
                     ? "active"
                     : ""
@@ -88,7 +101,7 @@ class SwitchNetworkSidebar extends Component {
                 }
               >
                 <img className="mr-3" src="/static/binance.png" alt="binance" />
-                <span>Binance</span>
+                <span>Binance Testnet</span>
               </li>
               <li
                 className={`my-2 p-1 cursor-pointer ${

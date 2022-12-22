@@ -54,6 +54,7 @@ const isValidChainId = (chainId) => {
   return [
     +process.env.REACT_APP_ETH_CHAIN_ID,
     +process.env.REACT_APP_BNB_CHAIN_ID,
+    +process.env.REACT_APP_BNB_MAINNET_CHAIN_ID,
     +process.env.REACT_APP_MATIC_CHAIN_ID,
     +process.env.REACT_APP_FTM_CHAIN_ID,
   ].includes(+compareWith);
@@ -74,6 +75,8 @@ const addresses = {
     process.env.REACT_APP_ETH_CONTRACT_ADDRESS,
   [process.env.REACT_APP_BNB_CHAIN_ID]:
     process.env.REACT_APP_BNB_CONTRACT_ADDRESS,
+  [process.env.REACT_APP_BNB_MAINNET_CHAIN_ID]:
+    process.env.REACT_APP_BNB_MAINNET_CONTRACT_ADDRESS,
   [process.env.REACT_APP_MATIC_CHAIN_ID]:
     process.env.REACT_APP_MATIC_CONTRACT_ADDRESS,
   [process.env.REACT_APP_FTM_CHAIN_ID]:
