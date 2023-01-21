@@ -109,7 +109,7 @@ cronTasks.getCreatedEvents = async (req, res, chainId) => {
     }
   } catch (err) {
     console.log(err.message);
-    utils.echoLog(`error in adding new event: ${err.message}`);
+    utils.echoLog(`error in adding new event for chain id ${chainId}: ${err.message}`);
   }
 };
 
